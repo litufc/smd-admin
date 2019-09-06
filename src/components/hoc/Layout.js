@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Aux from './Aux';
+import Aux from './Auxiliar';
 import NavBar from '../navbar/navbar'
 
 
