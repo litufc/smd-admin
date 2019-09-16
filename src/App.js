@@ -6,6 +6,7 @@ import Offer from './pages/offer/offer';
 import Resources from './pages/resources/resources';
 import Rooms from './pages/rooms/rooms';
 import Students from './pages/students/students';
+import Places from './pages/places/places';
 import './App.css';
 
 export default class App extends Component {
@@ -23,6 +24,7 @@ export default class App extends Component {
           <Route path="/recursos" component={Resources}></Route>
           <Route path="/chaves" component={Keys}></Route>
           <Route path="/salas" component={Rooms}></Route>
+          <Route path="/locais" component={Places}></Route>
         </Layout>
       </div>
     );

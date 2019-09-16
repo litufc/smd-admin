@@ -39,6 +39,7 @@ const NavBar = (props) => {
             <Link to="/recursos" className={classes.button} ><Button color="inherit">Recursos</Button></Link>
             <Link to="/chaves"  className={classes.button} ><Button color="inherit">Chaves</Button></Link>
             <Link to="/salas" className={classes.button} ><Button color="inherit">Salas</Button></Link>
+            <Link to="/locais" className={classes.button} ><Button color="inherit">Locais</Button></Link>
           </Toolbar>
         </AppBar>
       </div>

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import  { FirebaseContext } from '../../firebase/firebase-module';
 
 export default class Offer extends Component {
     constructor(props){
@@ -8,7 +9,11 @@ export default class Offer extends Component {
 
     render(){
         return(
-            <div>Oferta</div>
+            <FirebaseContext.Consumer>
+                {firebase => {
+                    return <div>I've access to Firebase and render something.</div>;
+                }}
+            </FirebaseContext.Consumer>
         )
     }
 }
