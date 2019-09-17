@@ -26,24 +26,26 @@ const useStyles = makeStyles(theme => ({
 
 const NavBar = (props) => {
     const classes = useStyles();
+    let navbar = []
+    if(props.visible) {
+      navbar = <div className={classes.root}>
+                  <AppBar position="static">
+                    <Toolbar>
+                      <Typography variant="h6" className={classes.title}>
+                        Aplicativo Secretaria SMD - Admin
+                      </Typography>
+                      <Link to="/oferta" className={classes.button} ><Button color="inherit">Oferta</Button></Link>
+                      <Link to="/alunos" className={classes.button} ><Button color="inherit">Alunos</Button></Link>
+                      <Link to="/recursos" className={classes.button} ><Button color="inherit">Recursos</Button></Link>
+                      <Link to="/chaves"  className={classes.button} ><Button color="inherit">Chaves</Button></Link>
+                      <Link to="/salas" className={classes.button} ><Button color="inherit">Salas</Button></Link>
+                      <Link to="/locais" className={classes.button} ><Button color="inherit">Locais</Button></Link>
+                    </Toolbar>
+                  </AppBar>
+                </div>
+    }
 
-    return (
-      <div className={classes.root}>
-        <AppBar position="static">
-          <Toolbar>
-            <Typography variant="h6" className={classes.title}>
-              Aplicativo Secretaria SMD - Admin
-            </Typography>
-            <Link to="/oferta" className={classes.button} ><Button color="inherit">Oferta</Button></Link>
-            <Link to="/alunos" className={classes.button} ><Button color="inherit">Alunos</Button></Link>
-            <Link to="/recursos" className={classes.button} ><Button color="inherit">Recursos</Button></Link>
-            <Link to="/chaves"  className={classes.button} ><Button color="inherit">Chaves</Button></Link>
-            <Link to="/salas" className={classes.button} ><Button color="inherit">Salas</Button></Link>
-            <Link to="/locais" className={classes.button} ><Button color="inherit">Locais</Button></Link>
-          </Toolbar>
-        </AppBar>
-      </div>
-    );
+    return navbar;
 }
 
 export default NavBar;

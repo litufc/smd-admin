@@ -9,14 +9,14 @@ const useStyles = makeStyles(theme => ({
     main: {
         padding: 16
     }
-  }));
+}));
 
 const Layout = (props) => {
     const classes = useStyles();
 
     return(
-        <Aux>       
-            <NavBar />
+        <Aux>
+            <NavBar visible={props.navbarVisible}/>
             <main className={classes.main}>
                 {props.children}
             </main>

@@ -41,6 +41,16 @@ class Firebase {
         this.auth.currentUser.updatePassword(password);
     }
 
+    isLogged = () => {
+        this.auth.onAuthStateChanged(user => {
+            if(user) {
+                return true
+            } else {
+                return false
+            }
+        })
+    }
+
     /* OFFER */
 
     addLesson = lesson => {
@@ -70,6 +80,7 @@ class Firebase {
     /* STUDENTS */
 
     registerStudent = student => {
+
         this.firestore.collection('students').add(student)
         .then(() => {
             console.log('Deu Certo')
