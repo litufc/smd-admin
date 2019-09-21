@@ -1,9 +1,9 @@
 import React from 'react';
 
-const Resources = () => (
+const ResourcesPage = () => (
   <div>
     <h1>Resources</h1>
   </div>
 );
 
-export default Resources;
+export default ResourcesPage;

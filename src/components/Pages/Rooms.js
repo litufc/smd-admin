@@ -1,9 +1,9 @@
 import React from 'react';
 
-const Rooms = () => (
+const RoomsPage = () => (
   <div>
     <h1>Rooms</h1>
   </div>
 );
 
-export default Rooms;
+export default RoomsPage;

@@ -3,11 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.4.2",
     "firebase": "^6.6.2",
+    "install": "^0.13.0",
+    "npm": "^6.11.3",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-router-dom": "^5.0.1",
-    "react-scripts": "3.1.2"
+    "react-scripts": "3.1.2",
+    "recompose": "^0.30.0"
   },
   "scripts": {
     "start": "react-scripts start",
