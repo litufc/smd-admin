@@ -11,8 +11,7 @@ const INITIAL_STATE = {
   name: '',
   place: 0,
   status: true,
-  error: null,
-  places: []
+  error: null
 };
 
 class KeysPageBase extends Component {

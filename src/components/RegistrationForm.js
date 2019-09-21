@@ -9,7 +9,7 @@ const RegistrationForm = (props) => (
       props.email != null ?
       <input
         name="email"
-        value={props.name}
+        value={props.email}
         onChange={props.onChange}
         type="email"
         placeholder="E-mail"
