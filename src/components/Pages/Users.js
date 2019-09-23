@@ -7,6 +7,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import RegistrationForm from '../RegistrationForm';
 import ListTemplate from '../ListTemplate';
+import InfoTemplate from '../InfoTemplate';
+import EditForm from '../EditForm';
+import AlertDialog from '../AlertDialog';
 import { withAuthorization } from '../../session/session-index';
 import { withFirebase } from '../../firebase/firebase-index';
 
@@ -16,12 +19,14 @@ const INITIAL_STATE = {
   code: '',
   course: '',
   phone: '',
-  role: 0,
+  role: '',
   error: null,
   roles: [
     'Aluno',
-    'Professor'
-  ]
+    'Professor',
+    'Outros'
+  ],
+  deleteDialog: false
 };
 
 class UsersPageBase extends Component {
@@ -33,24 +38,23 @@ class UsersPageBase extends Component {
   }
 
   componentDidMount() {
-    this.onLoadUsers();
-  }
-
-  onLoadUsers = () => {
     this.listener = this.props.firebase
       .getUsers()
-      .then(querySnapshot => {
-          this.users = []
-          querySnapshot.forEach(doc => {
-              const id = doc.id;
-              const data = doc.data();
-              this.users.push({id, ...data})
-          });
-          this.setState({users: this.users})
+      .onSnapshot(querySnapshot => {
+        this.users = []
+        querySnapshot.forEach(doc => {
+            const id = doc.id;
+            const data = doc.data();
+            this.users.push({id, ...data})
+        });
+        this.setState({users: this.users})
+      }, error => {
+        this.setState({ error });
       })
-      .catch(error => {
-          this.setState({ error });
-      });
+  }
+
+  componentWillUnmount() {
+    this.listener();
   }
 
   onSubmit = event => {
@@ -76,21 +80,59 @@ class UsersPageBase extends Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
+  onClickListItem = index => {
+    const selected = this.state.users[index]
+    this.setState({selected: index, editEmail: selected.email,
+                                    editName: selected.name,
+                                    editCode: selected.code,
+                                    editCourse: selected.course,
+                                    editPhone: selected.phone,
+                                    editRole: selected.role})
+  }
+
+  goEdit = () => {
+    this.setState({editable: true})
+  }
+
+  onEdit = () => {
+    const id = this.state.users[this.state.selected].id
+    const name = this.state.editName
+    const email = this.state.editEmail
+    const code = this.state.editCode
+    const course = this.state.editCourse
+    const phone = this.state.editPhone
+    const role = this.state.editRole
+    this.props.firebase
+      .updateUser({id, name, email, code, course, phone, role})
+      .then(() => {
+        this.setState({ ...INITIAL_STATE });
+        this.goBack();
+      })
+      .catch(error => {
+        this.setState({ error });
+      });
+  }
+
+  goBack = () => {
+    this.setState({editable: false})
+  }
+
   render() {
-    const { email, name, code, course, phone, role, error } = this.state;
-    const isInvalid = email === '' || name === '' || code === '' || course === '' || phone === '' || role === null;
+    const { email, name, code, course, phone, role, error, editEmail, editName, editCode, editCourse, editPhone, editRole } = this.state
+    const isInvalid = email === '' || name === '' || code === '' || course === '' || phone === '' || role === ''
+    const isEditInvalid = editEmail === '' || editName === '' || editCode === '' || editCourse === '' || editPhone === '' || editRole === ''
 
     let menuItems;
     if(this.state.roles != undefined){
-      menuItems = this.state.roles.map((role, index) => 
-        <MenuItem value={index}>{role}</MenuItem>
+      menuItems = this.state.roles.map(role => 
+        <MenuItem value={role}>{role}</MenuItem>
       )
     }
 
     let listItems;
     if(this.state.users != undefined){
-      listItems = this.state.users.map(user => 
-        <ListItem button>
+      listItems = this.state.users.map((user, index) => 
+        <ListItem button onClick={() => this.onClickListItem(index)}>
           <ListItemText primary={user.name} secondary={user.code} />
         </ListItem>
       )
@@ -111,6 +153,25 @@ class UsersPageBase extends Component {
                           error={error}
                           isInvalid={isInvalid}/>
         <ListTemplate listItems={listItems}/>
+        {
+            this.state.selected != null && !this.state.editable ?
+            <InfoTemplate selected={this.state.users[this.state.selected]} goEdit={this.goEdit}/> : null
+        }
+        {
+            this.state.selected != null && this.state.editable ?
+            <EditForm onEdit={this.onEdit}
+                      onChange={this.onChange}
+                      goBack={this.goBack}
+                      menuItems={menuItems}
+                      editName={editName}
+                      editEmail={editEmail}
+                      editCode={editCode}
+                      editCourse={editCourse}
+                      editPhone={editPhone}
+                      editRole={editRole}
+                      error={error}
+                      isInvalid={isEditInvalid}/> : null
+        }
       </div>
     )
   }

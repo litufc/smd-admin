@@ -53,87 +53,85 @@ class Firebase {
 
   registerUser = (email, password) => this.auth.createUserWithEmailAndPassword(email, password)
 
-  addUser = (studentId, student) => this.firestore.collection('students').doc(studentId).set(student)
+  addUser = (userId, student) => this.firestore.collection('users').doc(userId).set(student)
 
-  updateUser = student => 
-    this.firestore.collection('students').doc(student.id).set({
-        name: student.name,
-        code: student.code,
-        course: student.course,
-        phone: student.phone,
-        email: student.email
+  updateUser = user => 
+    this.firestore.collection('users').doc(user.id).update({
+        name: user.name,
+        code: user.code,
+        course: user.course,
+        phone: user.phone,
+        email: user.email,
+        role: user.role
     })
 
-  deleteUser = studentId => this.firestore.collection('students').doc(studentId).delete()
+  deleteUser = userId => this.firestore.collection('users').doc(userId).delete()
 
-  getUser = studentId => this.firestore.collection('students').doc(studentId).get()
+  getUser = userId => this.firestore.collection('users').doc(userId)
 
-  getUsers = () => this.firestore.collection('students').get()
+  getUsers = () => this.firestore.collection('users')
 
   /* RESOURCES */
 
   addResource = resource => this.firestore.collection('resources').add(resource)
 
   updateResource = resource =>
-    this.firestore.collection('resources').doc(resource.id).set({
+    this.firestore.collection('resources').doc(resource.id).update({
         name: resource.name,
-        status: resource.code,
         place: resource.place
     })
 
   deleteResource = resourceId => this.firestore.collection('resources').doc(resourceId).delete()
 
-  getResource = resourceId => this.firestore.collection('resources').doc(resourceId).get()
+  getResource = resourceId => this.firestore.collection('resources').doc(resourceId)
 
-  getResources = () => this.firestore.collection('resources').get()
+  getResources = () => this.firestore.collection('resources')
 
   /* KEYS */
 
   addKey = key => this.firestore.collection('keys').add(key) 
 
   updateKey = key =>
-    this.firestore.collection('keys').doc(key.id).set({
+    this.firestore.collection('keys').doc(key.id).update({
         name: key.name,
-        status: key.status,
         place: key.place
     })
 
   deleteKey = keyId => this.firestore.collection('keys').doc(keyId).delete()
 
-  getKey = keyId => this.firestore.collection('keys').doc(keyId).get()
+  getKey = keyId => this.firestore.collection('keys').doc(keyId)
 
-  getKeys = () => this.firestore.collection('keys').get()
+  getKeys = () => this.firestore.collection('keys')
 
   /* ROOMS */
 
   addRoom = room => this.firestore.collection('rooms').add(room)
 
   updateRoom = room => 
-    this.firestore.collection('rooms').doc(room.id).set({
-        name: room.name,
-        status: room.status
+    this.firestore.collection('rooms').doc(room.id).update({
+        name: room.name
     })
 
   deleteRoom = roomId => this.firestore.collection('rooms').doc(roomId).delete()
 
-  getRoom = roomId => this.firestore.collection('rooms').doc(roomId).get()
+  getRoom = roomId => this.firestore.collection('rooms').doc(roomId)
 
-  getRooms = () => this.firestore.collection('rooms').get()
+  getRooms = () => this.firestore.collection('rooms')
 
   /* PLACES */
 
   addPlace = place => this.firestore.collection('places').add(place)
 
   updatePlace = place =>
-    this.firestore.collection('places').doc(place.id).set({
+    this.firestore.collection('places').doc(place.id).update({
         name: place.name
     })
 
   deletePlace = placeId => this.firestore.collection('places').doc(placeId).delete()
 
-  getPlace = placeId => this.firestore.collection('places').doc(placeId).get()
+  getPlace = placeId => this.firestore.collection('places').doc(placeId)
 
-  getPlaces = () => this.firestore.collection('places').get()
+  getPlaces = () => this.firestore.collection('places')
 }
 
 export default Firebase;

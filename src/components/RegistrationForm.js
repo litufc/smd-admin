@@ -1,62 +1,69 @@
 import React from 'react';
 
+import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
+import Button from '@material-ui/core/Button';
 
 const RegistrationForm = (props) => (
   <form onSubmit={props.onSubmit}>
     {
       props.email != null ?
-      <input
+      <TextField
         name="email"
+        label="E-mail"
         value={props.email}
         onChange={props.onChange}
-        type="email"
-        placeholder="E-mail"
+        margin="normal"
+        variant="outlined"
       /> : null
     }
     
     {
       props.name != null ?
-      <input
+      <TextField
         name="name"
+        label="Nome"
         value={props.name}
         onChange={props.onChange}
-        type="text"
-        placeholder="Nome"
+        margin="normal"
+        variant="outlined"
       /> : null
     }
 
     {   
       props.code != null ?
-      <input
+      <TextField
         name="code"
+        label="Código"
         value={props.code}
         onChange={props.onChange}
-        type="text"
-        placeholder="Código"
+        margin="normal"
+        variant="outlined"
       /> : null
     }
 
     {   
       props.course != null ?
-      <input
+      <TextField
         name="course"
+        label="Curso"
         value={props.course}
         onChange={props.onChange}
-        type="text"
-        placeholder="Curso"
+        margin="normal"
+        variant="outlined"
       /> : null
     }
 
     {   
       props.phone != null ?
-      <input
+      <TextField
         name="phone"
+        label="Telefone"
         value={props.phone}
         onChange={props.onChange}
-        type="text"
-        placeholder="Telefone"
+        margin="normal"
+        variant="outlined"
       /> : null
     }
 
@@ -91,10 +98,10 @@ const RegistrationForm = (props) => (
         </Select>
       </div> : null
     }
-    
-    <button disabled={props.isInvalid} type="submit">
+
+    <Button disabled={props.isInvalid} type="submit" variant="contained" color="primary">
         Cadastrar
-    </button>
+    </Button>
 
     {props.error && <p>{props.error.message}</p>}
   </form>
