@@ -35,19 +35,21 @@ class Firebase {
       })
   }
 
+  /* ADMIN */
+
+  checkAdmin = userId => {
+    
+  }
+
   /* OFFER */
 
-  addLesson = lesson => {} 
+  addLesson = lesson => this.firestore.collection('lessons').add(lesson)
 
-  addDynamicLesson = lesson => {} 
+  deleteLesson = lessonId => this.firestore.collection('lessons').doc(lessonId).delete()
 
-  deleteLesson = lessonId => {}
+  getLesson = lessonId => this.firestore.collection('lessons').doc(lessonId)
 
-  deleteDynamicLesson = lessonId => {}
-
-  getLesson = lessonId => {}
-
-  getLessons = () => {}
+  getLessons = () => this.firestore.collection('lessons').orderBy("startTime")
 
   /* USERS */
 
@@ -69,7 +71,7 @@ class Firebase {
 
   getUser = userId => this.firestore.collection('users').doc(userId)
 
-  getUsers = () => this.firestore.collection('users')
+  getUsers = () => this.firestore.collection('users').orderBy("name")
 
   /* RESOURCES */
 
@@ -85,7 +87,7 @@ class Firebase {
 
   getResource = resourceId => this.firestore.collection('resources').doc(resourceId)
 
-  getResources = () => this.firestore.collection('resources')
+  getResources = () => this.firestore.collection('resources').orderBy("name")
 
   /* KEYS */
 
@@ -101,7 +103,7 @@ class Firebase {
 
   getKey = keyId => this.firestore.collection('keys').doc(keyId)
 
-  getKeys = () => this.firestore.collection('keys')
+  getKeys = () => this.firestore.collection('keys').orderBy("name")
 
   /* ROOMS */
 
@@ -116,7 +118,7 @@ class Firebase {
 
   getRoom = roomId => this.firestore.collection('rooms').doc(roomId)
 
-  getRooms = () => this.firestore.collection('rooms')
+  getRooms = () => this.firestore.collection('rooms').orderBy("name")
 
   /* PLACES */
 
@@ -131,7 +133,7 @@ class Firebase {
 
   getPlace = placeId => this.firestore.collection('places').doc(placeId)
 
-  getPlaces = () => this.firestore.collection('places')
+  getPlaces = () => this.firestore.collection('places').orderBy("name")
 }
 
 export default Firebase;

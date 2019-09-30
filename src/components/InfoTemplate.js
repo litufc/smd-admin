@@ -71,6 +71,51 @@ const InfoTemplate = (props) => (
             </ListItem> : null
         }
 
+        {
+            props.selected.startTime != null ?
+            <ListItem>
+                <ListItemText>
+                    Horário de Início: <b>{props.selected.startTime}</b>
+                </ListItemText>
+            </ListItem> : null
+        }
+
+        {
+            props.selected.endTime != null ?
+            <ListItem>
+                <ListItemText>
+                    Horário de Término: <b>{props.selected.endTime}</b>
+                </ListItemText>
+            </ListItem> : null
+        }
+
+        {
+            props.selected.teacher != null ?
+            <ListItem>
+                <ListItemText>
+                    Professor(a): <b>{props.selected.teacher}</b>
+                </ListItemText>
+            </ListItem> : null
+        }
+
+        {
+            props.selected.room != null ?
+            <ListItem>
+                <ListItemText>
+                    Sala: <b>{props.selected.room}</b>
+                </ListItemText>
+            </ListItem> : null
+        }
+
+        {
+            props.selected.day != null ?
+            <ListItem>
+                <ListItemText>
+                    Dia: <b>{props.selected.day}</b>
+                </ListItemText>
+            </ListItem> : null
+        }
+
         <Button variant="contained" color="secondary" onClick={props.goEdit}>
             Editar
         </Button>

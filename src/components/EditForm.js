@@ -100,6 +100,74 @@ const EditForm = (props) => (
             </div> : null
         }
 
+        {   
+            props.editStartTime != null ?
+            <TextField
+                name="startTime"
+                label="Horário de Início"
+                value={props.editStartTime}
+                onChange={props.onChange}
+                margin="normal"
+                variant="outlined"
+            /> : null
+        }
+
+        {   
+            props.editEndTime != null ?
+            <TextField
+                name="endTime"
+                label="Horário de Término"
+                value={props.editEndTime}
+                onChange={props.onChange}
+                margin="normal"
+                variant="outlined"
+            /> : null
+        }
+
+        {   
+            props.editTeacher != null ?
+            <TextField
+                name="teacher"
+                label="Professor(a)"
+                value={props.editTeacher}
+                onChange={props.onChange}
+                margin="normal"
+                variant="outlined"
+            /> : null
+        }
+
+        {
+            props.editRoom != null ?
+            <div>
+                <InputLabel>Sala</InputLabel>
+                <Select
+                    value={props.editRoom}
+                    onChange={props.onChange}
+                    inputProps={{
+                    name: 'editRoom'
+                    }}
+                >
+                    {props.roomItems}
+                </Select>
+            </div> : null
+        }
+
+        {
+            props.editDay != null ?
+            <div>
+                <InputLabel>Dia</InputLabel>
+                <Select
+                    value={props.editDay}
+                    onChange={props.onChange}
+                    inputProps={{
+                    name: 'day'
+                    }}
+                >
+                    {props.menuItems}
+                </Select>
+            </div> : null
+        }
+
         <Button onClick={props.goBack} variant="contained" color="primary">
             Voltar
         </Button>

@@ -99,6 +99,74 @@ const RegistrationForm = (props) => (
       </div> : null
     }
 
+    {   
+      props.startTime != null ?
+      <TextField
+        name="startTime"
+        label="Horário de Início"
+        value={props.startTime}
+        onChange={props.onChange}
+        margin="normal"
+        variant="outlined"
+      /> : null
+    }
+
+    {   
+      props.endTime != null ?
+      <TextField
+        name="endTime"
+        label="Horário de Término"
+        value={props.endTime}
+        onChange={props.onChange}
+        margin="normal"
+        variant="outlined"
+      /> : null
+    }
+
+    {   
+      props.teacher != null ?
+      <TextField
+        name="teacher"
+        label="Professor(a)"
+        value={props.teacher}
+        onChange={props.onChange}
+        margin="normal"
+        variant="outlined"
+      /> : null
+    }
+
+    {
+      props.room != null ?
+      <div>
+        <InputLabel>Sala</InputLabel>
+        <Select
+            value={props.room}
+            onChange={props.onChange}
+            inputProps={{
+              name: 'room'
+            }}
+        >
+            {props.roomItems}
+        </Select>
+      </div> : null
+    }
+
+    {
+      props.day != null ?
+      <div>
+        <InputLabel>Dia</InputLabel>
+        <Select
+            value={props.day}
+            onChange={props.onChange}
+            inputProps={{
+              name: 'day'
+            }}
+        >
+            {props.menuItems}
+        </Select>
+      </div> : null
+    }
+
     <Button disabled={props.isInvalid} type="submit" variant="contained" color="primary">
         Cadastrar
     </Button>

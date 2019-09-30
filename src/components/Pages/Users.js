@@ -9,7 +9,6 @@ import RegistrationForm from '../RegistrationForm';
 import ListTemplate from '../ListTemplate';
 import InfoTemplate from '../InfoTemplate';
 import EditForm from '../EditForm';
-import AlertDialog from '../AlertDialog';
 import { withAuthorization } from '../../session/session-index';
 import { withFirebase } from '../../firebase/firebase-index';
 
