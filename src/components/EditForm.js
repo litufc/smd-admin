@@ -6,7 +6,7 @@ import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 
 const EditForm = (props) => (
-    <form>
+    <form onSubmit={props.onEdit}>
         <h2>Editar</h2>
         {
             props.editEmail != null ?
@@ -101,6 +101,18 @@ const EditForm = (props) => (
         }
 
         {   
+            props.editLessonCode != null ?
+            <TextField
+                name="editLessonCode"
+                label="Código da Disciplina"
+                value={props.editLessonCode}
+                onChange={props.onChange}
+                margin="normal"
+                variant="outlined"
+            /> : null
+        }
+
+        {   
             props.editStartTime != null ?
             <TextField
                 name="startTime"
@@ -172,7 +184,7 @@ const EditForm = (props) => (
             Voltar
         </Button>
 
-        <Button onClick={props.onEdit} disabled={props.isInvalid} variant="contained" color="secondary">
+        <Button type="submit" disabled={props.isInvalid} variant="contained" color="secondary">
             Concluir Edição
         </Button>
 

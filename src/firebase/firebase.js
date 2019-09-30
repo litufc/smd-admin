@@ -37,19 +37,35 @@ class Firebase {
 
   /* ADMIN */
 
-  checkAdmin = userId => {
-    
-  }
+  checkAdmin = userId => {}
 
   /* OFFER */
 
   addLesson = lesson => this.firestore.collection('lessons').add(lesson)
 
+  addDynamicLesson = lesson => this.firestore.collection('dynamicLessons').add(lesson)
+
   deleteLesson = lessonId => this.firestore.collection('lessons').doc(lessonId).delete()
+
+  deleteDynamicLesson = lessonId => this.firestore.collection('dynamicLessons').doc(lessonId).delete()
 
   getLesson = lessonId => this.firestore.collection('lessons').doc(lessonId)
 
+  getDynamicLesson = lessonId => this.firestore.collection('dynamicLessons').doc(lessonId)
+
   getLessons = () => this.firestore.collection('lessons').orderBy("startTime")
+
+  getDynamicLessons = () => this.firestore.collection('dynamicLessons').orderBy("startTime")
+
+  /* LOAN */
+
+  addKeyLoan = loan => this.firestore.collection('keyLoans').add(loan)
+
+  addResourceLoan = loan => this.firestore.collection('resourceLoans').add(loan)
+
+  getKeyLoans = () => this.firestore.collection('keyLoans')
+  
+  getResourceLoans = () => this.firestore.collection('resourceLoans').orderBy("date").orderBy("loanTime")
 
   /* USERS */
 

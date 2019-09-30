@@ -8,6 +8,7 @@ import {
 import Navigation from './Navigation';
 import SignInPage from './Pages/SignIn';
 import PasswordForgetPage from './Pages/PasswordForget';
+import LoansPage from './Pages/Loans';
 import OfferPage from './Pages/Offer';
 import UsersPage from './Pages/Users';
 import KeysPage from './Pages/Keys';
@@ -25,6 +26,7 @@ const App = () => (
     <Redirect exact from="/" to={ROUTES.OFFER}/>
     <Route path={ROUTES.SIGN_IN} component={SignInPage} />
     <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
+    <Route path={ROUTES.LOANS} component={LoansPage} />
     <Route path={ROUTES.OFFER} component={OfferPage} />
     <Route path={ROUTES.USERS} component={UsersPage} />
     <Route path={ROUTES.KEYS} component={KeysPage} />

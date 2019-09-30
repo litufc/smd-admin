@@ -45,6 +45,7 @@ const NavBar = (props) => {
           <Typography variant="h6" className={classes.title}>
             Aplicativo Secretaria SMD - Admin
           </Typography>
+          <Link to={ROUTES.LOANS} className={classes.button} ><Button color="inherit">Empréstimos</Button></Link>
           <Link to={ROUTES.OFFER} className={classes.button} ><Button color="inherit">Oferta</Button></Link>
           <Link to={ROUTES.USERS} className={classes.button} ><Button color="inherit">Usuários</Button></Link>
           <Link to={ROUTES.RESOURCES} className={classes.button} ><Button color="inherit">Recursos</Button></Link>

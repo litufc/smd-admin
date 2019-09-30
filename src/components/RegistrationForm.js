@@ -100,6 +100,18 @@ const RegistrationForm = (props) => (
     }
 
     {   
+      props.lessonCode != null ?
+      <TextField
+        name="lessonCode"
+        label="Código da Disciplina"
+        value={props.lessonCode}
+        onChange={props.onChange}
+        margin="normal"
+        variant="outlined"
+      /> : null
+    }
+
+    {   
       props.startTime != null ?
       <TextField
         name="startTime"

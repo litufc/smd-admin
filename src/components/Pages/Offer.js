@@ -18,6 +18,7 @@ import { tsConstructSignatureDeclaration } from '@babel/types';
 
 const INITIAL_STATE = {
   name: '',
+  lessonCode: '',
   startTime: '',
   endTime: '',
   teacher: '',
@@ -131,8 +132,8 @@ class OfferPageBase extends Component {
   }
 
   onSubmit = event => {
-    const { name, startTime, endTime, teacher, room, day } = this.state
-    const lesson = { name, startTime, endTime, teacher, room, day }
+    const { name, lessonCode, startTime, endTime, teacher, room, day } = this.state
+    const lesson = { name, lessonCode, startTime, endTime, teacher, room, day }
   
     console.log(this.checkClash(lesson))
 
@@ -158,6 +159,7 @@ class OfferPageBase extends Component {
     const selected = this.state.lessons[index]
     this.setState({selected: index,
                    editName: selected.name, 
+                   editLessonCode: selected.lessonCode,
                    editStartTime: selected.startTime,
                    editEndTime: selected.endTime,
                    editTeacher: selected.teacher,
@@ -172,13 +174,14 @@ class OfferPageBase extends Component {
   onEdit = () => {
     const id = this.state.lessons[this.state.selected].id
     const name = this.state.editName
+    const lessonCode = this.state.lessonCode
     const startTime = this.state.editStartTime
     const endTime = this.state.editEndTime
     const teacher = this.state.editTeacher
     const room = this.state.editRoom
     const day = this.state.editDay
     this.props.firebase
-      .updateLesson({id, name, startTime, endTime, teacher, room, day})
+      .updateLesson({id, name, lessonCode, startTime, endTime, teacher, room, day})
       .then(() => {
         this.setState({ ...INITIAL_STATE });
         this.goBack();
@@ -328,10 +331,10 @@ class OfferPageBase extends Component {
   }
 
   render() {
-    const { name, startTime, endTime, teacher, room, day, error,
-            editName, editStartTime, editEndTime, editTeacher, editRoom, editDay } = this.state
-    const isInvalid = name === '' || startTime === '' || endTime === '' || teacher === '' || room === '' || day === ''
-    const isEditInvalid = editName === '' || editStartTime === '' || editEndTime === '' || editTeacher === '' || editRoom === '' || editDay === '' 
+    const { name, lessonCode, startTime, endTime, teacher, room, day, error,
+            editName, editLessonCode, editStartTime, editEndTime, editTeacher, editRoom, editDay } = this.state
+    const isInvalid = name === '' || lessonCode === '' || startTime === '' || endTime === '' || teacher === '' || room === '' || day === ''
+    const isEditInvalid = editName === '' || editLessonCode === '' || editStartTime === '' || editEndTime === '' || editTeacher === '' || editRoom === '' || editDay === '' 
 
     let menuItems;
     if(this.state.days != undefined){
@@ -351,7 +354,7 @@ class OfferPageBase extends Component {
     if(this.state.lessons != undefined){
       listItems = this.state.lessons.map((lesson, index) => 
         <ListItem button onClick={() => this.onClickListItem(index)}>
-          <ListItemText primary={lesson.name + ' - Professor(a): ' + lesson.teacher}
+          <ListItemText primary={'['+ lessonCode + ']' + lesson.name + ' - Professor(a): ' + lesson.teacher}
                         secondary={lesson.day + ' de ' + lesson.startTime + ' às ' + lesson.endTime + ' - Sala: ' + lesson.room}/>
         </ListItem>
       )
@@ -372,6 +375,7 @@ class OfferPageBase extends Component {
                           menuItems={menuItems}
                           roomItems={roomItems}
                           name={name}
+                          lessonCode={lessonCode}
                           startTime={startTime}
                           endTime={endTime}
                           teacher={teacher}
@@ -404,6 +408,7 @@ class OfferPageBase extends Component {
                       menuItems={menuItems}
                       roomItems={roomItems}
                       editName={editName}
+                      editLessonCode={editLessonCode}
                       editStartTime={editStartTime}
                       editEndTime={editEndTime}
                       editTeacher={editTeacher}
