@@ -3,18 +3,19 @@ import { compose } from 'recompose';
 import * as moment from 'moment';
 import 'moment/locale/pt-br';
 
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 
 import RegistrationForm from '../RegistrationForm';
-import ListTemplate from '../ListTemplate';
+import DataTable from '../DataTable';
 import InfoTemplate from '../InfoTemplate';
 import EditForm from '../EditForm';
 import AlertDialog from '../AlertDialog';
+import MainGrid from '../MainGrid';
+import DaysTabs from '../DaysTabs';
 import { withAuthorization } from '../../session/session-index';
 import { withFirebase } from '../../firebase/firebase-index';
-import { tsConstructSignatureDeclaration } from '@babel/types';
 
 const INITIAL_STATE = {
   name: '',
@@ -243,87 +244,99 @@ class OfferPageBase extends Component {
 
     switch(lesson.day) {
       case 'Segunda-Feira':
-        console.log('HERE 1 ' + checked)
-        do {
-          console.log('HERE 2 ' + checked)
-          if(check(room, startTime, endTime, this.mondayLessons[counter].room, this.mondayLessons[counter].startTime, this.mondayLessons[counter].endTime)){
-            checked = true
-            console.log('HERE 3 ' + checked)
+        if(this.mondayLessons.length > 0) {
+          console.log('HERE 1 ' + checked)
+          do {
+            console.log('HERE 2 ' + checked)
+            if(check(room, startTime, endTime, this.mondayLessons[counter].room, this.mondayLessons[counter].startTime, this.mondayLessons[counter].endTime)){
+              checked = true
+              console.log('HERE 3 ' + checked)
+            }
+            counter++
           }
-          counter++
+          while(checked === false && (counter < this.mondayLessons.length))
+          console.log('HERE 4 ' + checked)
         }
-        while(checked === false && (counter < this.mondayLessons.length))
-        console.log('HERE 4 ' + checked)
         break;
 
       case 'Terça-Feira':
-        console.log('HERE 1 ' + checked)
-        do {
-          console.log('HERE 2 ' + checked + ' COUNTER ' + counter)
-          if(check(room, startTime, endTime, this.tuesdayLessons[counter].room, this.tuesdayLessons[counter].startTime, this.tuesdayLessons[counter].endTime)){
-            checked = true
-            console.log('HERE 3 ' + checked)
+        if(this.tuesdayLessons.length > 0) {
+          console.log('HERE 1 ' + checked)
+          do {
+            console.log('HERE 2 ' + checked + ' COUNTER ' + counter)
+            if(check(room, startTime, endTime, this.tuesdayLessons[counter].room, this.tuesdayLessons[counter].startTime, this.tuesdayLessons[counter].endTime)){
+              checked = true
+              console.log('HERE 3 ' + checked)
+            }
+            counter++
           }
-          counter++
+          while(checked === false && (counter < this.tuesdayLessons.length))
+          console.log('HERE 4 ' + checked)
         }
-        while(checked === false && (counter < this.tuesdayLessons.length))
-        console.log('HERE 4 ' + checked)
         break;
 
       case 'Quarta-Feira':
-        console.log('HERE 1 ' + checked)
-        do {
-          console.log('HERE 2 ' + checked)
-          if(check(room, startTime, endTime, this.wednesdayLessons[counter].room, this.wednesdayLessons[counter].startTime, this.wednesdayLessons[counter].endTime)){
-            checked = true
-            console.log('HERE 3 ' + checked)
+        if(this.wednesdayLessons.length > 0) {
+          console.log('HERE 1 ' + checked)
+          do {
+            console.log('HERE 2 ' + checked)
+            if(check(room, startTime, endTime, this.wednesdayLessons[counter].room, this.wednesdayLessons[counter].startTime, this.wednesdayLessons[counter].endTime)){
+              checked = true
+              console.log('HERE 3 ' + checked)
+            }
+            counter++
           }
-          counter++
+          while(checked === false && (counter < this.wednesdayLessons.length))
+          console.log('HERE 4 ' + checked)
         }
-        while(checked === false && (counter < this.wednesdayLessons.length))
-        console.log('HERE 4 ' + checked)
         break;
 
       case 'Quinta-Feira':
-        console.log('HERE 1 ' + checked)
-        do {
-          console.log('HERE 2 ' + checked)
-          if(check(room, startTime, endTime, this.thursdayLessons[counter].room, this.thursdayLessons[counter].startTime, this.thursdayLessons[counter].endTime)){
-            checked = true
-            console.log('HERE 3 ' + checked)
+        if(this.thursdayLessons.length > 0) {
+          console.log('HERE 1 ' + checked)
+          do {
+            console.log('HERE 2 ' + checked)
+            if(check(room, startTime, endTime, this.thursdayLessons[counter].room, this.thursdayLessons[counter].startTime, this.thursdayLessons[counter].endTime)){
+              checked = true
+              console.log('HERE 3 ' + checked)
+            }
+            counter++
           }
-          counter++
+          while(checked === false && (counter < this.thursdayLessons.length))
+          console.log('HERE 4 ' + checked)
         }
-        while(checked === false && (counter < this.thursdayLessons.length))
-        console.log('HERE 4 ' + checked)
         break;
 
       case 'Sexta-Feira':
-        console.log('HERE 1 ' + checked)
-        do {
-          console.log('HERE 2 ' + checked)
-          if(check(room, startTime, endTime, this.fridayLessons[counter].room, this.fridayLessons[counter].startTime, this.fridayLessons[counter].endTime)){
-            checked = true
-            console.log('HERE 3 ' + checked)
+        if(this.fridayLessons.length > 0) {
+          console.log('HERE 1 ' + checked)
+          do {
+            console.log('HERE 2 ' + checked)
+            if(check(room, startTime, endTime, this.fridayLessons[counter].room, this.fridayLessons[counter].startTime, this.fridayLessons[counter].endTime)){
+              checked = true
+              console.log('HERE 3 ' + checked)
+            }
+            counter++
           }
-          counter++
+          while(checked === false && (counter < this.fridayLessons.length))
+          console.log('HERE 4 ' + checked)
         }
-        while(checked === false && (counter < this.fridayLessons.length))
-        console.log('HERE 4 ' + checked)
         break;
 
       case 'Sábado':
-        console.log('HERE 1 ' + checked)
-        do {
-          console.log('HERE 2 ' + checked)
-          if(check(room, startTime, endTime, this.saturdayLessons[counter].room, this.saturdayLessons[counter].startTime, this.saturdayLessons[counter].endTime)){
-            checked = true
-            console.log('HERE 3 ' + checked)
+        if(this.saturdayLessons.length > 0) {
+          console.log('HERE 1 ' + checked)
+          do {
+            console.log('HERE 2 ' + checked)
+            if(check(room, startTime, endTime, this.saturdayLessons[counter].room, this.saturdayLessons[counter].startTime, this.saturdayLessons[counter].endTime)){
+              checked = true
+              console.log('HERE 3 ' + checked)
+            }
+            counter++
           }
-          counter++
+          while(checked === false && (counter < this.saturdayLessons.length))
+          console.log('HERE 4 ' + checked)
         }
-        while(checked === false && (counter < this.saturdayLessons.length))
-        console.log('HERE 4 ' + checked)
         break;
     }
     console.log('HERE 5 ' + checked)
@@ -350,73 +363,147 @@ class OfferPageBase extends Component {
       )
     }
 
-    let listItems
     if(this.state.lessons != undefined){
-      listItems = this.state.lessons.map((lesson, index) => 
-        <ListItem button onClick={() => this.onClickListItem(index)}>
-          <ListItemText primary={'['+ lessonCode + ']' + lesson.name + ' - Professor(a): ' + lesson.teacher}
-                        secondary={lesson.day + ' de ' + lesson.startTime + ' às ' + lesson.endTime + ' - Sala: ' + lesson.room}/>
-        </ListItem>
-      )
       const count = this.state.count
-      this.mondayItems = listItems.slice(0, count[0])
-      this.tuesdayItems = listItems.slice(count[0], count[1])
-      this.wednesdayItems = listItems.slice(count[1], count[2])
-      this.thursdayItems = listItems.slice(count[2], count[3])
-      this.fridayItems = listItems.slice(count[3], count[4])
-      this.saturdayItems = listItems.slice(count[4], count[5])
+      this.mondayLessons = this.state.lessons.slice(0, count[0])
+      this.tuesdayLessons = this.state.lessons.slice(count[0], count[1])
+      this.wednesdayLessons = this.state.lessons.slice(count[1], count[2])
+      this.thursdayLessons = this.state.lessons.slice(count[2], count[3])
+      this.fridayLessons = this.state.lessons.slice(count[3], count[4])
+      this.saturdayLessons = this.state.lessons.slice(count[4], count[5])
     }
-    
+
+    const registration = 
+    <div>
+      <Typography style={{textAlign: 'center', marginBottom: 8}} variant="h5">
+        Cadastro de Disciplina
+      </Typography>
+      <RegistrationForm onSubmit={this.onSubmit}
+                        onChange={this.onChange}
+                        menuItems={menuItems}
+                        roomItems={roomItems}
+                        name={name}
+                        lessonCode={lessonCode}
+                        startTime={startTime}
+                        endTime={endTime}
+                        teacher={teacher}
+                        room={room}
+                        day={day}
+                        error={error}
+                        isInvalid={isInvalid}/>
+    </div>
+        
+    const columns = [
+      {title: 'Nome da Disciplina', field: 'name'},
+      {title: 'Código da Disciplina', field: 'lessonCode'},
+      {title: 'Horário de Início', field: 'startTime'},
+      {title: 'Horário de Término', field: 'endTime'},
+      {title: 'Professor(es)', field: 'teacher'},
+      {title: 'Sala', field: 'room'},
+    ]
+
+    if(this.mondayLessons == undefined) this.mondayLessons = []
+    if(this.tuesdayLessons == undefined) this.tuesdayLessons = []
+    if(this.wednesdayLessons == undefined) this.wednesdayLessons = []
+    if(this.thursdayLessons == undefined) this.thursdayLessons = []
+    if(this.fridayLessons == undefined) this.fridayLessons = []
+    if(this.saturdayLessons == undefined) this.saturdayLessons = []
+
+    const mondayList =
+    <DataTable 
+      columns={columns}
+      data={this.mondayLessons}
+      title='Segunda-Feira'
+    />
+
+    const tuesdayList =
+    <DataTable 
+      columns={columns}
+      data={this.tuesdayLessons}
+      title='Terça-Feira'
+    />
+
+    const wednesdayList = 
+    <DataTable 
+      columns={columns}
+      data={this.wednesdayLessons}
+      title='Quarta-Feira'
+    />
+
+    const thursdayList = 
+    <DataTable 
+      columns={columns}
+      data={this.thursdayLessons}
+      title='Quinta-Feira'
+    />
+
+    const fridayList = 
+    <DataTable 
+      columns={columns}
+      data={this.fridayLessons}
+      title='Sexta-Feira'
+    />
+
+    const saturdayList =
+    <DataTable 
+      columns={columns}
+      data={this.saturdayLessons}
+      title='Sábado'
+    />
+
+    const list =
+    <DaysTabs 
+      monday={mondayList}
+      tuesday={tuesdayList}
+      wednesday={wednesdayList}
+      thursday={thursdayList}
+      friday={fridayList}
+      saturday={saturdayList}
+    />
+                  
+    const info = 
+    <div>
+      {
+        this.state.selected != null && !this.state.editable  ?
+        <div>
+          <Typography style={{textAlign: 'center', marginBottom: 8}} variant="h5">
+            Informações da Disciplina
+          </Typography>
+          <InfoTemplate selected={this.state.lessons[this.state.selected]} goEdit={this.goEdit}/>
+        </div> : null
+      }
+      {
+        this.state.selected != null && this.state.editable ?
+        <div>
+          <Typography style={{textAlign: 'center', marginBottom: 8}} variant="h5">
+            Editar Disciplina
+          </Typography>
+          <EditForm onEdit={this.onEdit}
+                    onChange={this.onChange}
+                    openDeleteDialog={this.openDeleteDialog}
+                    goBack={this.goBack}
+                    menuItems={menuItems}
+                    roomItems={roomItems}
+                    editName={editName}
+                    editLessonCode={editLessonCode}
+                    editStartTime={editStartTime}
+                    editEndTime={editEndTime}
+                    editTeacher={editTeacher}
+                    editRoom={editRoom}
+                    editDay={editDay}
+                    error={error}
+                    isInvalid={isEditInvalid}/> 
+        </div> : null
+        
+      }
+    </div>
+
     return(
       <div>
-        <h1>Locais</h1>
-        <RegistrationForm onSubmit={this.onSubmit}
-                          onChange={this.onChange}
-                          menuItems={menuItems}
-                          roomItems={roomItems}
-                          name={name}
-                          lessonCode={lessonCode}
-                          startTime={startTime}
-                          endTime={endTime}
-                          teacher={teacher}
-                          room={room}
-                          day={day}
-                          error={error}
-                          isInvalid={isInvalid}/>
-        <h3>Segunda-Feira</h3>
-        <ListTemplate listItems={this.mondayItems}/>
-        <h3>Terça-Feira</h3>
-        <ListTemplate listItems={this.tuesdayItems}/>
-        <h3>Quarta-Feira</h3>
-        <ListTemplate listItems={this.wednesdayItems}/>
-        <h3>Quinta-Feira</h3>
-        <ListTemplate listItems={this.thursdayItems}/>
-        <h3>Sexta-Feira</h3>
-        <ListTemplate listItems={this.fridayItems}/>
-        <h3>Sábado</h3>
-        <ListTemplate listItems={this.saturdayItems}/>
-        {
-            this.state.selected != null && !this.state.editable  ?
-            <InfoTemplate selected={this.state.lessons[this.state.selected]} goEdit={this.goEdit}/> : null
-        }
-        {
-            this.state.selected != null && this.state.editable ?
-            <EditForm onEdit={this.onEdit}
-                      onChange={this.onChange}
-                      openDeleteDialog={this.openDeleteDialog}
-                      goBack={this.goBack}
-                      menuItems={menuItems}
-                      roomItems={roomItems}
-                      editName={editName}
-                      editLessonCode={editLessonCode}
-                      editStartTime={editStartTime}
-                      editEndTime={editEndTime}
-                      editTeacher={editTeacher}
-                      editRoom={editRoom}
-                      editDay={editDay}
-                      error={error}
-                      isInvalid={isEditInvalid}/> : null
-        }
+        <Typography style={{textAlign: 'center', margin: 32}} variant="h3">
+          Oferta de Disciplinas
+        </Typography>
+        <MainGrid left={registration} down={list} right={info} style='2-1'/>
         <AlertDialog onClose={this.closeDeleteDialog}
                      onAction={this.onDelete}
                      title={'Tem certeza que você deseja excluir a aula ' + editName + ' ?'}
