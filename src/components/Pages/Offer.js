@@ -5,36 +5,17 @@ import 'moment/locale/pt-br';
 
 import Typography from '@material-ui/core/Typography';
 
-import DataTable from '../DataTable';
+import EditableDataTable from '../EditableDataTable';
 import DaysTabs from '../DaysTabs';
 import { withAuthorization } from '../../session/session-index';
 import { withFirebase } from '../../firebase/firebase-index';
-
-const INITIAL_STATE = {
-  name: '',
-  lessonCode: '',
-  startTime: '',
-  endTime: '',
-  teacher: '',
-  room: '',
-  day: '',
-  editable: false,
-  error: null,
-  deleteDialog: false,
-  days: [{name: 'Segunda-Feira'},
-         {name: 'Terça-Feira'},
-         {name: 'Quarta-Feira'},
-         {name: 'Quinta-Feira'},
-         {name: 'Sexta-Feira'},
-         {name: 'Sábado'}]
-};
 
 class OfferPageBase extends Component {
 
   constructor(props){
     super(props)
 
-    this.state = { ...INITIAL_STATE };
+    this.state = {}
   }
 
   componentDidMount() {
@@ -132,7 +113,7 @@ class OfferPageBase extends Component {
       this.props.firebase
       .addLesson(lesson)
       .then(() => {
-        this.setState({ ...INITIAL_STATE });
+        //Snackbar
       })
       .catch(error => {
         this.setState({ error });
@@ -144,8 +125,7 @@ class OfferPageBase extends Component {
     this.props.firebase
       .updateLesson(lesson)
       .then(() => {
-        this.setState({ ...INITIAL_STATE });
-        this.goBack();
+        //Snackbar
       })
       .catch(error => {
         this.setState({ error });
@@ -156,8 +136,7 @@ class OfferPageBase extends Component {
     this.props.firebase
       .deleteLesson(id)
       .then(() => {
-        this.setState({ ...INITIAL_STATE, editable: false, selected: null });
-        this.closeDeleteDialog()
+        //Snackbar
       })
       .catch(error => {
         this.setState({ error });
@@ -293,10 +272,8 @@ class OfferPageBase extends Component {
   render() {
     let rooms = {}
     if(this.state.rooms != undefined){
-      let counter = 0
       this.state.rooms.forEach(room => {
-        rooms[counter] = room.name
-        counter++
+        rooms[room.name] = room.name
       })
     } 
 
@@ -327,10 +304,10 @@ class OfferPageBase extends Component {
     if(this.saturdayLessons == undefined) this.saturdayLessons = []
 
     const mondayList =
-    <DataTable 
+    <EditableDataTable 
       columns={columns}
       data={this.mondayLessons}
-      day='Segunda-Feira'
+      title='Segunda-Feira'
       add={this.onAdd}
       edit={this.onEdit}
       delete={this.onDelete}
@@ -338,10 +315,10 @@ class OfferPageBase extends Component {
     />
 
     const tuesdayList =
-    <DataTable 
+    <EditableDataTable 
       columns={columns}
       data={this.tuesdayLessons}
-      day='Terça-Feira'
+      title='Terça-Feira'
       add={this.onAdd}
       edit={this.onEdit}
       delete={this.onDelete}
@@ -349,10 +326,10 @@ class OfferPageBase extends Component {
     />
 
     const wednesdayList = 
-    <DataTable 
+    <EditableDataTable 
       columns={columns}
       data={this.wednesdayLessons}
-      day='Quarta-Feira'
+      title='Quarta-Feira'
       add={this.onAdd}
       edit={this.onEdit}
       delete={this.onDelete}
@@ -360,10 +337,10 @@ class OfferPageBase extends Component {
     />
 
     const thursdayList = 
-    <DataTable 
+    <EditableDataTable 
       columns={columns}
       data={this.thursdayLessons}
-      day='Quinta-Feira'
+      title='Quinta-Feira'
       add={this.onAdd}
       edit={this.onEdit}
       delete={this.onDelete}
@@ -371,10 +348,10 @@ class OfferPageBase extends Component {
     />
 
     const fridayList = 
-    <DataTable 
+    <EditableDataTable 
       columns={columns}
       data={this.fridayLessons}
-      day='Sexta-Feira'
+      title='Sexta-Feira'
       add={this.onAdd}
       edit={this.onEdit}
       delete={this.onDelete}
@@ -382,10 +359,10 @@ class OfferPageBase extends Component {
     />
 
     const saturdayList =
-    <DataTable 
+    <EditableDataTable 
       columns={columns}
       data={this.saturdayLessons}
-      day='Sábado'
+      title='Sábado'
       add={this.onAdd}
       edit={this.onEdit}
       delete={this.onDelete}
@@ -400,7 +377,6 @@ class OfferPageBase extends Component {
       thursday={thursdayList}
       friday={fridayList}
       saturday={saturdayList}
-      type='Disciplina'
     />
 
     return(

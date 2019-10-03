@@ -134,7 +134,8 @@ class Firebase {
   updateKey = key =>
     this.firestore.collection('keys').doc(key.id).update({
         name: key.name,
-        place: key.place
+        place: key.place,
+        status: key.status
     })
 
   deleteKey = keyId => this.firestore.collection('keys').doc(keyId).delete()

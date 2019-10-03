@@ -40,7 +40,7 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
- const DataTable = (props) => {
+ const EditableDataTable = (props) => {
 
   return (
     <div style={{ maxWidth: "100%" }}>
@@ -104,9 +104,37 @@ const tableIcons = {
             editTooltip: 'Editar ' + props.type
           },
         }}
+
+        editable={{
+          onRowAdd: newData => new Promise((resolve, reject) => {
+            setTimeout(() => {
+              const add = () => props.add(newData, props.title)
+              add()
+              resolve()
+            }, 1000)
+          }),
+          onRowUpdate: newData => new Promise((resolve, reject) => {
+            setTimeout(() => {
+              console.log(newData)
+              const edit = () => props.edit(newData)
+              edit()
+              resolve()
+            }, 1000)
+          }),
+          onRowDelete: oldData => new Promise((resolve, reject) => {
+            setTimeout(() => {
+              console.log(oldData.id)
+              const del = () => props.delete(oldData.id)
+              del()
+              resolve()
+            }, 1000)
+          })
+        }}
+
+
       />
     </div>
   )
 }
 
-export default DataTable
+export default EditableDataTable

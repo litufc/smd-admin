@@ -1,27 +1,18 @@
 import React, { Component } from 'react';
 import { compose } from 'recompose';
 
-import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 
+import LoanTabs from '../LoanTabs';
 import DataTable from '../DataTable';
 import { withAuthorization } from '../../session/session-index';
 import { withFirebase } from '../../firebase/firebase-index';
-
-const INITIAL_STATE = {
-  name: '',
-  place: '',
-  status: true,
-  editable: false,
-  error: null,
-  deleteDialog: false
-};
 
 class LoansPageBase extends Component {
 
   constructor(props){
     super(props)
-
-    this.state = { ...INITIAL_STATE };
+    this.state = {}
   }
 
   componentDidMount() {
@@ -67,57 +58,55 @@ class LoansPageBase extends Component {
   }
 
   render() {
-    let listItems = []
-    if(this.state.keyLoans != undefined){
-      listItems = this.state.keyLoans
-    }
+
+    const keyColumns = [
+      {title: 'Data do Empréstimo', field: 'date'},
+      {title: 'Chave', field: 'key'},
+      {title: 'Usuário', field: 'name'},
+      {title: 'Código do Usuário', field: 'code'},
+      {title: 'Telefone do Usuário', field: 'phone'},
+      {title: 'Hora de Saída', field: 'loanTime'},
+      {title: 'Hora da Chegada', field: 'devolutionTime'}
+    ]
+
+    const resourceColumns = [
+      {title: 'Data do Empréstimo', field: 'date'},
+      {title: 'Recurso', field: 'resource'},
+      {title: 'Usuário', field: 'name'},
+      {title: 'Código do Usuário', field: 'code'},
+      {title: 'Telefone do Usuário', field: 'phone'},
+      {title: 'Hora de Saída', field: 'loanTime'},
+      {title: 'Hora da Chegada', field: 'devolutionTime'}
+    ]
+
+    const keyList =
+    <DataTable 
+      columns={keyColumns}
+      data={this.state.keyLoans}
+      title='Histórico de Empréstimos de Chaves'
+      type='Empréstimo de Chave'
+    />
+
+    const resourceList =
+    <DataTable 
+      columns={resourceColumns}
+      data={this.state.resourceLoans}
+      title='Histórico de Empréstimos de Recursos'
+      type='Empréstimo de Recurso'
+    />
+
+    const list =
+    <LoanTabs 
+      keys={keyList}
+      resources={resourceList}
+    />
 
     return(
       <div>
-        <h1>Histórico de Empréstimos</h1>
-        <Paper style={{ height: 700, width: '100%' }}>
-            <DataTable
-                rowCount={listItems.length}
-                rowGetter={({ index }) => listItems[index]}
-                columns={[
-                    {
-                        width: 200,
-                        label: 'Data',
-                        dataKey: 'date',
-                    },
-                    {
-                        width: 400,
-                        label: 'Chave',
-                        dataKey: 'key'
-                    },
-                    {
-                        width: 420,
-                        label: 'Usuário',
-                        dataKey: 'name'
-                    },
-                    {
-                        width: 200,
-                        label: 'Código',
-                        dataKey: 'code'
-                    },
-                    {
-                        width: 300,
-                        label: 'Telefone',
-                        dataKey: 'phone'
-                    },
-                    {
-                        width: 200,
-                        label: 'Hora de Saída',
-                        dataKey: 'loanTime'
-                    },
-                    {
-                        width: 200,
-                        label: 'Hora de Chegada',
-                        dataKey: 'devolutionTime'
-                    },
-                ]}
-            />
-        </Paper>
+        <Typography style={{textAlign: 'center', margin: 32}} variant="h3">
+          Empréstimos
+        </Typography>
+        {list}
       </div>
     )
   }

@@ -18,7 +18,7 @@ function TabPanel(props) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      <Box p={2}>{children}</Box>
+      <Box p={0}>{children}</Box>
     </Typography>
   );
 }
@@ -54,30 +54,14 @@ const DaysTabs = (props) => {
   return (
     <div className={classes.root}>
     <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" centered>
-        <Tab label="Segunda-Feira" {...a11yProps(0)} />
-        <Tab label="Terça-Feira" {...a11yProps(1)} />
-        <Tab label="Quarta-Feira" {...a11yProps(2)} />
-        <Tab label="Quinta-Feira" {...a11yProps(3)} />
-        <Tab label="Sexta-Feira" {...a11yProps(4)} />
-        <Tab label="Sábado" {...a11yProps(5)} />
+        <Tab label="Chaves" {...a11yProps(0)} />
+        <Tab label="Recursos" {...a11yProps(1)} />
     </Tabs>
     <TabPanel value={value} index={0}>
-      {props.monday}
+      {props.keys}
     </TabPanel>
     <TabPanel value={value} index={1}>
-      {props.tuesday}
-    </TabPanel>
-    <TabPanel value={value} index={2}>
-      {props.wednesday}
-    </TabPanel>
-    <TabPanel value={value} index={3}>
-      {props.thursday}
-    </TabPanel>
-    <TabPanel value={value} index={4}>
-      {props.friday}
-    </TabPanel>
-    <TabPanel value={value} index={5}>
-      {props.saturday}
+      {props.resources}
     </TabPanel>
     </div>
   );
