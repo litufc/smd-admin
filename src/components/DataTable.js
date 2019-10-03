@@ -41,54 +41,99 @@ const tableIcons = {
 };
 
  const DataTable = (props) => {
+
+  
+
   return (
     <div style={{ maxWidth: "100%" }}>
       <MaterialTable
         icons={tableIcons}
         columns={props.columns}
         data={props.data}
-        title={props.title}
-
+        title={props.day}
+  
         options={{
-          search: true
+          search: true,
+          pageSize: 10,
+          pageSizeOptions: [10],
+          exportButton: true
         }}
 
         localization={{
-          pagination: {
-              labelDisplayedRows: '{from}-{to} de {count}'
+          pagination: { 
+            lastTooltip: 'Última página',
+            lastAriaLabel: 'Última página',
+            nextTooltip: 'Próxima página',
+            nextAriaLabel: 'Próxima página',
+            previousTooltip: 'Página anterior',
+            previousAriaLabel: 'Página anterior',
+            firstTooltip: 'Primeira página',
+            firstAriaLabel: 'Primeira página',
+            labelRowsPerPage: 'Linhas por página:',
+            labelRowsSelect: 'linhas',
+            labelDisplayedRows: '{from}-{to} de {count}'
           },
           toolbar: {
-              nRowsSelected: '{0} linhas selecionadas'
+            nRowsSelected: '{0} linhas selecionadas',
+            searchTooltip: 'Buscar ' + props.type,
+            searchPlaceholder: 'Buscar ' + props.type,
+            exportName: 'Exportar para .CSV',
+            exportAriaLabel: 'Exportar',
+            exportTitle: 'Exportar',
+            showColumnsAriaLabel: 'Mostrar Colunas',
+            showColumnsTitle: 'Show Columns',
+            nRowsSelected: '{0} linha(s) selecionadas',
+            addRemoveColumns: 'Adicionar ou remover colunas'
           },
           header: {
-              actions: 'Ações'
+            actions: 'Ações'
+          },
+          grouping: {
+            placeholder: 'Puxar cabeçalhos...'
           },
           body: {
-              emptyDataSourceMessage: 'Sem dados para mostrar',
-              filterRow: {
-                  filterTooltip: 'Filtrar'
-              }
-          }
+            emptyDataSourceMessage: 'Sem dados para mostrar',
+            filterRow: {
+              filterTooltip: 'Filtrar'
+            },
+            editRow: {
+              deleteText: 'Você tem certeza que deseja excluir esse(a) ' + props.type,
+              cancelTooltip: 'Cancelar',
+              saveTooltip: 'Confirmar'
+            },
+            addTooltip: 'Adicionar ' + props.type,
+            deleteTooltip: 'Excluir ' + props.type,
+            editTooltip: 'Editar ' + props.type
+          },
         }}
 
-        actions={[
-          {
-            icon: 'add',
-            tooltip: 'Add User',
-            isFreeAction: true,
-            onClick: (event) => alert("You want to add a new row")
-          },
-          {
-            icon: 'info',
-            tooltip: 'Save User',
-            onClick: (event, rowData) => alert("You saved " + rowData.name)
-          },
-          {
-            icon: 'delete',
-            tooltip: 'Delete User',
-            onClick: (event, rowData) => alert("You want to delete " + rowData.name)
-          }
-        ]}
+        editable={{
+          onRowAdd: newData => new Promise((resolve, reject) => {
+            setTimeout(() => {
+              const add = () => props.add(newData, props.day)
+              add()
+              resolve()
+            }, 1000)
+          }),
+          onRowUpdate: newData => new Promise((resolve, reject) => {
+            setTimeout(() => {
+              console.log(newData)
+              const edit = () => props.edit(newData)
+              edit()
+              resolve()
+            }, 1000)
+          }),
+          onRowDelete: oldData => new Promise((resolve, reject) => {
+            setTimeout(() => {
+              console.log(oldData.id)
+              const del = () => props.delete(oldData.id)
+              del()
+              resolve()
+            }, 1000)
+          })
+        }}
+
+
       />
     </div>
   )

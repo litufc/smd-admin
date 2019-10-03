@@ -3,16 +3,9 @@ import { compose } from 'recompose';
 import * as moment from 'moment';
 import 'moment/locale/pt-br';
 
-import MenuItem from '@material-ui/core/MenuItem';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
-import RegistrationForm from '../RegistrationForm';
 import DataTable from '../DataTable';
-import InfoTemplate from '../InfoTemplate';
-import EditForm from '../EditForm';
-import AlertDialog from '../AlertDialog';
-import MainGrid from '../MainGrid';
 import DaysTabs from '../DaysTabs';
 import { withAuthorization } from '../../session/session-index';
 import { withFirebase } from '../../firebase/firebase-index';
@@ -132,11 +125,8 @@ class OfferPageBase extends Component {
     this.roomsListener()
   }
 
-  onSubmit = event => {
-    const { name, lessonCode, startTime, endTime, teacher, room, day } = this.state
-    const lesson = { name, lessonCode, startTime, endTime, teacher, room, day }
-  
-    console.log(this.checkClash(lesson))
+  onAdd = (lesson, day) => {
+    lesson.day = day
 
     if(!this.checkClash(lesson)) {
       this.props.firebase
@@ -147,42 +137,12 @@ class OfferPageBase extends Component {
       .catch(error => {
         this.setState({ error });
       });
-    } 
-
-    event.preventDefault();
+    }
   }
 
-  onChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
-
-  onClickListItem = index => {
-    const selected = this.state.lessons[index]
-    this.setState({selected: index,
-                   editName: selected.name, 
-                   editLessonCode: selected.lessonCode,
-                   editStartTime: selected.startTime,
-                   editEndTime: selected.endTime,
-                   editTeacher: selected.teacher,
-                   editRoom: selected.room,
-                   editDay: selected.day})
-  }
-
-  goEdit = () => {
-    this.setState({editable: true})
-  }
-
-  onEdit = () => {
-    const id = this.state.lessons[this.state.selected].id
-    const name = this.state.editName
-    const lessonCode = this.state.lessonCode
-    const startTime = this.state.editStartTime
-    const endTime = this.state.editEndTime
-    const teacher = this.state.editTeacher
-    const room = this.state.editRoom
-    const day = this.state.editDay
+  onEdit = (lesson) => {
     this.props.firebase
-      .updateLesson({id, name, lessonCode, startTime, endTime, teacher, room, day})
+      .updateLesson(lesson)
       .then(() => {
         this.setState({ ...INITIAL_STATE });
         this.goBack();
@@ -192,20 +152,7 @@ class OfferPageBase extends Component {
       });
   }
 
-  goBack = () => {
-    this.setState({editable: false})
-  }
-
-  openDeleteDialog = () => {
-    this.setState({deleteDialog: true})
-  }
-
-  closeDeleteDialog = () => {
-    this.setState({deleteDialog: false})
-  }
-
-  onDelete = () => {
-    const id = this.state.lessons[this.state.selected].id
+  onDelete = id => {
     this.props.firebase
       .deleteLesson(id)
       .then(() => {
@@ -344,24 +291,14 @@ class OfferPageBase extends Component {
   }
 
   render() {
-    const { name, lessonCode, startTime, endTime, teacher, room, day, error,
-            editName, editLessonCode, editStartTime, editEndTime, editTeacher, editRoom, editDay } = this.state
-    const isInvalid = name === '' || lessonCode === '' || startTime === '' || endTime === '' || teacher === '' || room === '' || day === ''
-    const isEditInvalid = editName === '' || editLessonCode === '' || editStartTime === '' || editEndTime === '' || editTeacher === '' || editRoom === '' || editDay === '' 
-
-    let menuItems;
-    if(this.state.days != undefined){
-      menuItems = this.state.days.map(day => 
-        <MenuItem value={day.name}>{day.name}</MenuItem>
-      )
-    }
-
-    let roomItems;
+    let rooms = {}
     if(this.state.rooms != undefined){
-      roomItems = this.state.rooms.map(room => 
-        <MenuItem value={room.name}>{room.name}</MenuItem>
-      )
-    }
+      let counter = 0
+      this.state.rooms.forEach(room => {
+        rooms[counter] = room.name
+        counter++
+      })
+    } 
 
     if(this.state.lessons != undefined){
       const count = this.state.count
@@ -372,26 +309,6 @@ class OfferPageBase extends Component {
       this.fridayLessons = this.state.lessons.slice(count[3], count[4])
       this.saturdayLessons = this.state.lessons.slice(count[4], count[5])
     }
-
-    const registration = 
-    <div>
-      <Typography style={{textAlign: 'center', marginBottom: 8}} variant="h5">
-        Cadastro de Disciplina
-      </Typography>
-      <RegistrationForm onSubmit={this.onSubmit}
-                        onChange={this.onChange}
-                        menuItems={menuItems}
-                        roomItems={roomItems}
-                        name={name}
-                        lessonCode={lessonCode}
-                        startTime={startTime}
-                        endTime={endTime}
-                        teacher={teacher}
-                        room={room}
-                        day={day}
-                        error={error}
-                        isInvalid={isInvalid}/>
-    </div>
         
     const columns = [
       {title: 'Nome da Disciplina', field: 'name'},
@@ -399,7 +316,7 @@ class OfferPageBase extends Component {
       {title: 'Horário de Início', field: 'startTime'},
       {title: 'Horário de Término', field: 'endTime'},
       {title: 'Professor(es)', field: 'teacher'},
-      {title: 'Sala', field: 'room'},
+      {title: 'Sala', field: 'room', lookup: rooms},
     ]
 
     if(this.mondayLessons == undefined) this.mondayLessons = []
@@ -413,42 +330,66 @@ class OfferPageBase extends Component {
     <DataTable 
       columns={columns}
       data={this.mondayLessons}
-      title='Segunda-Feira'
+      day='Segunda-Feira'
+      add={this.onAdd}
+      edit={this.onEdit}
+      delete={this.onDelete}
+      type='Disciplina'
     />
 
     const tuesdayList =
     <DataTable 
       columns={columns}
       data={this.tuesdayLessons}
-      title='Terça-Feira'
+      day='Terça-Feira'
+      add={this.onAdd}
+      edit={this.onEdit}
+      delete={this.onDelete}
+      type='Disciplina'
     />
 
     const wednesdayList = 
     <DataTable 
       columns={columns}
       data={this.wednesdayLessons}
-      title='Quarta-Feira'
+      day='Quarta-Feira'
+      add={this.onAdd}
+      edit={this.onEdit}
+      delete={this.onDelete}
+      type='Disciplina'
     />
 
     const thursdayList = 
     <DataTable 
       columns={columns}
       data={this.thursdayLessons}
-      title='Quinta-Feira'
+      day='Quinta-Feira'
+      add={this.onAdd}
+      edit={this.onEdit}
+      delete={this.onDelete}
+      type='Disciplina'
     />
 
     const fridayList = 
     <DataTable 
       columns={columns}
       data={this.fridayLessons}
-      title='Sexta-Feira'
+      day='Sexta-Feira'
+      add={this.onAdd}
+      edit={this.onEdit}
+      delete={this.onDelete}
+      type='Disciplina'
     />
 
     const saturdayList =
     <DataTable 
       columns={columns}
       data={this.saturdayLessons}
-      title='Sábado'
+      day='Sábado'
+      add={this.onAdd}
+      edit={this.onEdit}
+      delete={this.onDelete}
+      type='Disciplina'
     />
 
     const list =
@@ -459,57 +400,15 @@ class OfferPageBase extends Component {
       thursday={thursdayList}
       friday={fridayList}
       saturday={saturdayList}
+      type='Disciplina'
     />
-                  
-    const info = 
-    <div>
-      {
-        this.state.selected != null && !this.state.editable  ?
-        <div>
-          <Typography style={{textAlign: 'center', marginBottom: 8}} variant="h5">
-            Informações da Disciplina
-          </Typography>
-          <InfoTemplate selected={this.state.lessons[this.state.selected]} goEdit={this.goEdit}/>
-        </div> : null
-      }
-      {
-        this.state.selected != null && this.state.editable ?
-        <div>
-          <Typography style={{textAlign: 'center', marginBottom: 8}} variant="h5">
-            Editar Disciplina
-          </Typography>
-          <EditForm onEdit={this.onEdit}
-                    onChange={this.onChange}
-                    openDeleteDialog={this.openDeleteDialog}
-                    goBack={this.goBack}
-                    menuItems={menuItems}
-                    roomItems={roomItems}
-                    editName={editName}
-                    editLessonCode={editLessonCode}
-                    editStartTime={editStartTime}
-                    editEndTime={editEndTime}
-                    editTeacher={editTeacher}
-                    editRoom={editRoom}
-                    editDay={editDay}
-                    error={error}
-                    isInvalid={isEditInvalid}/> 
-        </div> : null
-        
-      }
-    </div>
 
     return(
       <div>
         <Typography style={{textAlign: 'center', margin: 32}} variant="h3">
           Oferta de Disciplinas
         </Typography>
-        <MainGrid left={registration} down={list} right={info} style='2-1'/>
-        <AlertDialog onClose={this.closeDeleteDialog}
-                     onAction={this.onDelete}
-                     title={'Tem certeza que você deseja excluir a aula ' + editName + ' ?'}
-                     yes={'Sim, pode excluir!'}
-                     no={'Não tenho certeza...'}
-                     open={this.state.deleteDialog}/>
+        {list}
       </div>
     )
   }

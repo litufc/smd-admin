@@ -49,6 +49,28 @@ class Firebase {
 
   deleteDynamicLesson = lessonId => this.firestore.collection('dynamicLessons').doc(lessonId).delete()
 
+  updateLesson = lesson => 
+    this.firestore.collection('lessons').doc(lesson.id).update({
+      name: lesson.name,
+      lessonCode: lesson.lessonCode,
+      startTime: lesson.startTime,
+      endTime: lesson.endTime,
+      teacher: lesson.teacher,
+      day: lesson.day,
+      room: lesson.room
+    })
+
+  updateDynamicLesson = lesson => 
+    this.firestore.collection('dynamicLessons').doc(lesson.id).update({
+      name: lesson.name,
+      lessonCode: lesson.lessonCode,
+      startTime: lesson.startTime,
+      endTime: lesson.endTime,
+      teacher: lesson.teacher,
+      specificDay: lesson.specificDay,
+      room: lesson.room
+    })
+
   getLesson = lessonId => this.firestore.collection('lessons').doc(lessonId)
 
   getDynamicLesson = lessonId => this.firestore.collection('dynamicLessons').doc(lessonId)
