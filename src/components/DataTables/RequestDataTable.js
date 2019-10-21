@@ -40,7 +40,7 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
- const DataTable = (props) => {
+ const RequestDataTable = (props) => {
 
   return (
     <div style={{ maxWidth: "100%" }}>
@@ -56,6 +56,23 @@ const tableIcons = {
           pageSizeOptions: [10],
           exportButton: true
         }}
+
+        actions={[
+            {
+                icon: 'check',
+                tooltip: 'Aceitar Pedido',
+                onClick: (event, rowData) => {
+                    props.accept(rowData)
+                }
+            },
+            {
+                icon: 'clear',
+                tooltip: 'Negar Pedido',
+                onClick: (event, rowData) => {
+                    props.negate(rowData)
+                }
+            } 
+        ]}
 
         localization={{
           pagination: { 
@@ -109,4 +126,4 @@ const tableIcons = {
   )
 }
 
-export default DataTable
+export default RequestDataTable

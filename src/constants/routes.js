@@ -8,3 +8,4 @@ export const ROOMS = '/salas';
 export const PLACES = '/locais';
 export const OPTIONS = '/configuracoes';
 export const LOANS = '/emprestimos';
+export const REQUESTS = '/pedidos';

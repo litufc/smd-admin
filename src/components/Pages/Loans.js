@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { compose } from 'recompose';
+import * as moment from 'moment';
+import 'moment/locale/pt-br';
 
 import Typography from '@material-ui/core/Typography';
 
-import LoanTabs from '../LoanTabs';
-import DataTable from '../DataTable';
+import LoanTabs from '../Tabs/LoanTabs';
+import LoanDataTable from '../DataTables/LoanDataTable';
 import { withAuthorization } from '../../session/session-index';
 import { withFirebase } from '../../firebase/firebase-index';
 
@@ -16,8 +18,14 @@ class LoansPageBase extends Component {
   }
 
   componentDidMount() {
-    this.getKeyLoans()
-    this.getResourceLoans()
+    this.listener = this.props.firebase
+        .getAdmin()
+        .onSnapshot(doc => {
+            const data = doc.data();
+            this.setState({place: data.place})
+            this.getKeyLoans()
+            this.getResourceLoans()
+        })
   }
 
   getKeyLoans = () => {
@@ -53,11 +61,51 @@ class LoansPageBase extends Component {
   }
 
   componentWillUnmount() {
-    this.keyListener()
-    this.resourceListener()
+    this.listener()
+  }
+
+  returnKey = (loan) => {
+    //Alterar a chave: Indisponível => Disponível - user: deletar
+    const now = moment().format('HH:mm')
+    this.props.firebase
+    .updateKeyDeletingUser(loan.keyId)
+    .then(() => {
+      //Alterar o devolutionTime do Loan
+      this.props.firebase.updateKeyLoan(loan.id, now)
+      .then(() => {
+        //Snackbar deu certo
+      })
+      .catch(error => {
+        //Snackbar deu errado
+      })
+    })
+    .catch(error => {
+      //Snackbar deu errado
+    })
+  }
+
+  returnResource = (loan) => {
+    //Alterar o recurso: Indisponível => Disponível - user: deletar
+    const now = moment().format('HH:mm')
+    this.props.firebase
+    .updateResourceDeletingUser(loan.resourceId)
+    .then(() => {
+      //Alterar o devolutionTime do Loan
+      this.props.firebase.updateResourceLoan(loan.id, now)
+      .then(() => {
+        //Snackbar deu certo
+      })
+      .catch(error => {
+        //Snackbar deu errado
+      })
+    })
+    .catch(error => {
+      //Snackbar deu errado
+    })
   }
 
   render() {
+    console.log(this.state.keyLoans)
 
     const keyColumns = [
       {title: 'Data do Empréstimo', field: 'date'},
@@ -65,6 +113,8 @@ class LoansPageBase extends Component {
       {title: 'Usuário', field: 'name'},
       {title: 'Código do Usuário', field: 'code'},
       {title: 'Telefone do Usuário', field: 'phone'},
+      {title: 'Curso do Usuário', field: 'course'},
+      {title: 'Local', field: 'place'},
       {title: 'Hora de Saída', field: 'loanTime'},
       {title: 'Hora da Chegada', field: 'devolutionTime'}
     ]
@@ -75,24 +125,30 @@ class LoansPageBase extends Component {
       {title: 'Usuário', field: 'name'},
       {title: 'Código do Usuário', field: 'code'},
       {title: 'Telefone do Usuário', field: 'phone'},
+      {title: 'Curso do Usuário', field: 'course'},
+      {title: 'Local', field: 'place'},
       {title: 'Hora de Saída', field: 'loanTime'},
       {title: 'Hora da Chegada', field: 'devolutionTime'}
     ]
 
     const keyList =
-    <DataTable 
+    <LoanDataTable 
       columns={keyColumns}
       data={this.state.keyLoans}
       title='Histórico de Empréstimos de Chaves'
       type='Empréstimo de Chave'
+      place={this.state.place}
+      return={this.returnKey}
     />
 
     const resourceList =
-    <DataTable 
+    <LoanDataTable 
       columns={resourceColumns}
       data={this.state.resourceLoans}
       title='Histórico de Empréstimos de Recursos'
       type='Empréstimo de Recurso'
+      place={this.state.place}
+      return={this.returnResource}
     />
 
     const list =

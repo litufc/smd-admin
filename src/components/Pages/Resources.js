@@ -4,7 +4,7 @@ import { compose } from 'recompose';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
-import EditableDataTable from '../EditableDataTable';
+import EditableDataTable from '../DataTables/EditableDataTable';
 import { withAuthorization } from '../../session/session-index';
 import { withFirebase } from '../../firebase/firebase-index';
 
@@ -67,7 +67,7 @@ class ResourcesPageBase extends Component {
 
   onEdit = resource => {
     this.props.firebase
-      .updateResource(resource)
+      .updateResourceWithOutUser(resource)
       .then(() => {
         //Snackbar
       })
@@ -110,7 +110,7 @@ class ResourcesPageBase extends Component {
     const list =
     <EditableDataTable 
       columns={columns}
-      data={this.state.keys}
+      data={this.state.resources}
       title='Recursos'
       add={this.onAdd}
       edit={this.onEdit}

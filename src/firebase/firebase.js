@@ -14,9 +14,18 @@ const firebaseConfig = {
 class Firebase {
   constructor() {
     app.initializeApp(firebaseConfig);
-
+    
+    this.firebase = app
     this.auth = app.auth();
     this.firestore = app.firestore();
+    this.firestore.enablePersistence()
+    .catch(function(err) {
+        if (err.code == 'failed-precondition') {
+            // Snackbar erro de múltiplas abas
+        } else if (err.code == 'unimplemented') {
+            // Snackbar erro de browser
+        }
+    });
   }
 
   signIn = (email, password) => this.auth.signInWithEmailAndPassword(email, password)
@@ -37,7 +46,10 @@ class Firebase {
 
   /* ADMIN */
 
-  checkAdmin = userId => {}
+  getAdmin = () => this.firestore.collection('admins').doc(this.auth.currentUser.uid)
+
+  //Checar se é admin ou supervisor/usuário
+  checkAdmin = () => {}
 
   /* OFFER */
 
@@ -85,15 +97,38 @@ class Firebase {
 
   addResourceLoan = loan => this.firestore.collection('resourceLoans').add(loan)
 
-  getKeyLoans = () => this.firestore.collection('keyLoans')
+  updateKeyLoan = (loanId, now) => this.firestore.collection('keyLoans').doc(loanId).update({
+    devolutionTime: now
+  })
+
+  updateResourceLoan = (loanId, now) => this.firestore.collection('resourceLoans').doc(loanId).update({
+    devolutionTime: now
+  })
+
+  getKeyLoans = () => this.firestore.collection('keyLoans').orderBy("timestamp", "desc")
   
-  getResourceLoans = () => this.firestore.collection('resourceLoans').orderBy("date").orderBy("loanTime")
+  getResourceLoans = () => this.firestore.collection('resourceLoans').orderBy("timestamp", "desc")
+
+ 
+  /* LOAN REQUESTS */
+
+  deleteKeyRequest = (requestId, place)  => this.firestore.collection(place+'KeyRequests').doc(requestId).delete()
+
+  deleteResourceRequest = (requestId, place)  => this.firestore.collection(place+'ResourceRequests').doc(requestId).delete()
+
+  getKeyRequest = (requestId, place)  => this.firestore.collection(place+'KeyRequests').doc(requestId)
+
+  getResourceRequest = (requestId, place)  => this.firestore.collection(place+'ResourceRequests').doc(requestId)
+
+  getKeyRequests = place => this.firestore.collection(place+'KeyRequests').orderBy("timestamp", "desc")
+
+  getResourceRequests = place => this.firestore.collection(place+'ResourceRequests').orderBy("timestamp", "desc")
 
   /* USERS */
 
   registerUser = (email, password) => this.auth.createUserWithEmailAndPassword(email, password)
 
-  addUser = (userId, student) => this.firestore.collection('users').doc(userId).set(student)
+  addUser = (userId, user) => this.firestore.collection('users').doc(userId).set(user)
 
   updateUser = user => 
     this.firestore.collection('users').doc(user.id).update({
@@ -116,9 +151,24 @@ class Firebase {
   addResource = resource => this.firestore.collection('resources').add(resource)
 
   updateResource = resource =>
-    this.firestore.collection('resources').doc(resource.id).update({
+    this.firestore.collection('resources').doc(resource.id).set({
         name: resource.name,
-        place: resource.place
+        place: resource.place,
+        status: resource.status,
+        user: resource.user
+    })
+
+  updateResourceWithOutUser = resource =>
+    this.firestore.collection('resources').doc(resource.id).update({
+      name: resource.name,
+      place: resource.place,
+      status: resource.status
+    })
+  
+  updateResourceDeletingUser = resourceId =>
+    this.firestore.collection('resources').doc(resourceId).update({
+      status: true,
+      user: this.firebase.firestore.FieldValue.delete()
     })
 
   deleteResource = resourceId => this.firestore.collection('resources').doc(resourceId).delete()
@@ -132,10 +182,24 @@ class Firebase {
   addKey = key => this.firestore.collection('keys').add(key) 
 
   updateKey = key =>
+    this.firestore.collection('keys').doc(key.id).set({
+      name: key.name,
+      place: key.place,
+      status: key.status,
+      user: key.user
+    })
+
+  updateKeyWithOutUser = key =>
     this.firestore.collection('keys').doc(key.id).update({
-        name: key.name,
-        place: key.place,
-        status: key.status
+      name: key.name,
+      place: key.place,
+      status: key.status
+    })
+
+  updateKeyDeletingUser = keyId =>
+    this.firestore.collection('keys').doc(keyId).update({
+      status: true,
+      user: this.firebase.firestore.FieldValue.delete()
     })
 
   deleteKey = keyId => this.firestore.collection('keys').doc(keyId).delete()
@@ -150,7 +214,8 @@ class Firebase {
 
   updateRoom = room => 
     this.firestore.collection('rooms').doc(room.id).update({
-        name: room.name
+        name: room.name,
+        status: room.status
     })
 
   deleteRoom = roomId => this.firestore.collection('rooms').doc(roomId).delete()

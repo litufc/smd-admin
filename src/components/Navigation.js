@@ -45,6 +45,7 @@ const NavBar = (props) => {
           <Typography variant="h6" className={classes.title}>
             Aplicativo Secretaria SMD - Admin
           </Typography>
+          <Link to={ROUTES.REQUESTS} className={classes.button} ><Button color="inherit">Pedidos</Button></Link>
           <Link to={ROUTES.LOANS} className={classes.button} ><Button color="inherit">Empréstimos</Button></Link>
           <Link to={ROUTES.OFFER} className={classes.button} ><Button color="inherit">Oferta</Button></Link>
           <Link to={ROUTES.USERS} className={classes.button} ><Button color="inherit">Usuários</Button></Link>
@@ -52,7 +53,7 @@ const NavBar = (props) => {
           <Link to={ROUTES.KEYS} className={classes.button} ><Button color="inherit">Chaves</Button></Link>
           <Link to={ROUTES.ROOMS} className={classes.button} ><Button color="inherit">Salas</Button></Link>
           <Link to={ROUTES.PLACES} className={classes.button} ><Button color="inherit">Locais</Button></Link>
-          <Link to={ROUTES.OPTIONS} className={classes.button} ><Button color="inherit">Opções</Button></Link>
+          {/*<Link to={ROUTES.OPTIONS} className={classes.button} ><Button color="inherit">Opções</Button></Link>*/}
           <div className={classes.button} ><SignOutButton /></div>
         </Toolbar>
       </AppBar>

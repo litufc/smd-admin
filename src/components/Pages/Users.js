@@ -4,7 +4,7 @@ import { compose } from 'recompose';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
-import EditableDataTable from '../EditableDataTable';
+import EditableDataTable from '../DataTables/EditableDataTable';
 import { withAuthorization } from '../../session/session-index';
 import { withFirebase } from '../../firebase/firebase-index';
 
@@ -38,9 +38,8 @@ class UsersPageBase extends Component {
   onAdd = (user, foo) => {
     this.props.firebase
       .registerUser(user.email, '123456')
-      .then(user => {
-        return this.props.firebase
-          .addUser(user.user.uid, user)
+      .then(u => {
+        this.props.firebase.addUser(u.user.uid, user)
       })
       .then(() => {
         //Snackbar

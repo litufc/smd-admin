@@ -54,11 +54,11 @@ const DaysTabs = (props) => {
   return (
     <div className={classes.root}>
     <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" centered>
-        <Tab label="Segunda-Feira" {...a11yProps(0)} />
-        <Tab label="Terça-Feira" {...a11yProps(1)} />
-        <Tab label="Quarta-Feira" {...a11yProps(2)} />
-        <Tab label="Quinta-Feira" {...a11yProps(3)} />
-        <Tab label="Sexta-Feira" {...a11yProps(4)} />
+        <Tab label="Segunda-feira" {...a11yProps(0)} />
+        <Tab label="Terça-feira" {...a11yProps(1)} />
+        <Tab label="Quarta-feira" {...a11yProps(2)} />
+        <Tab label="Quinta-feira" {...a11yProps(3)} />
+        <Tab label="Sexta-feira" {...a11yProps(4)} />
         <Tab label="Sábado" {...a11yProps(5)} />
     </Tabs>
     <TabPanel value={value} index={0}>

@@ -4,7 +4,7 @@ import { compose } from 'recompose';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
-import EditableDataTable from '../EditableDataTable';
+import EditableDataTable from '../DataTables/EditableDataTable';
 import { withAuthorization } from '../../session/session-index';
 import { withFirebase } from '../../firebase/firebase-index';
 

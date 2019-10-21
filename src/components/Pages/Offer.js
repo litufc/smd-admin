@@ -5,8 +5,8 @@ import 'moment/locale/pt-br';
 
 import Typography from '@material-ui/core/Typography';
 
-import EditableDataTable from '../EditableDataTable';
-import DaysTabs from '../DaysTabs';
+import EditableDataTable from '../DataTables/EditableDataTable';
+import DaysTabs from '../Tabs/DaysTabs';
 import { withAuthorization } from '../../session/session-index';
 import { withFirebase } from '../../firebase/firebase-index';
 
@@ -23,63 +23,42 @@ class OfferPageBase extends Component {
     this.listener = this.props.firebase
       .getLessons()
       .onSnapshot(querySnapshot => {
-        this.lessons = []
-        this.monday = []
-        this.tuesday = []
-        this.wednesday = []
-        this.thursday = []
-        this.friday = []
-        this.saturday = []
-        this.count = []
-        this.moCount = 0
-        this.tuCount = 0
-        this.weCount = 0
-        this.thCount = 0
-        this.frCount = 0
-        this.saCount = 0
+        const monday = []
+        const tuesday = []
+        const wednesday = []
+        const thursday = []
+        const friday = []
+        const saturday = []
           querySnapshot.forEach(doc => {
               const id = doc.id;
               const data = doc.data();
               switch(data.day){
-                case 'Segunda-Feira':
-                  this.monday.push({id, ...data})
-                  this.moCount++
+                case 'Segunda-feira':
+                  monday.push({id, ...data})
                   break;
-                case 'Terça-Feira':
-                  this.tuesday.push({id, ...data})
-                  this.tuCount++
+                case 'Terça-feira':
+                  tuesday.push({id, ...data})
                   break;
-                case 'Quarta-Feira':
-                  this.wednesday.push({id, ...data})
-                  this.weCount++
+                case 'Quarta-feira':
+                  wednesday.push({id, ...data})
                   break;
-                case 'Quinta-Feira':
-                  this.thursday.push({id, ...data})
-                  this.thCount++
+                case 'Quinta-feira':
+                  thursday.push({id, ...data})
                   break;
-                case 'Sexta-Feira':
-                  this.friday.push({id, ...data})
-                  this.frCount++
+                case 'Sexta-feira':
+                  friday.push({id, ...data})
                   break;
                 case 'Sábado':
-                  this.saturday.push({id, ...data})
-                  this.saCount++
+                  saturday.push({id, ...data})
                   break;
               }
           });
-          this.lessons.push(...this.monday,
-                            ...this.tuesday,
-                            ...this.wednesday,
-                            ...this.thursday,
-                            ...this.friday,
-                            ...this.saturday)
-          this.count.push(this.moCount,
-                          this.moCount+this.tuCount,
-                          this.moCount+this.tuCount+this.weCount,
-                          this.moCount+this.tuCount+this.weCount+this.thCount,
-                          this.moCount+this.tuCount+this.weCount+this.thCount+this.frCount,
-                          this.moCount+this.tuCount+this.weCount+this.thCount+this.frCount+this.saCount)
-          this.setState({lessons: this.lessons, count: this.count})
+          this.setState({mondayLessons: monday,
+                         tuesdayLessons: tuesday,
+                         wednesdayLessons: wednesday,
+                         thursdayLessons: thursday,
+                         fridayLessons: friday,
+                         saturdayLessons: saturday})
       }, error => {
         this.setState({ error });
       })
@@ -144,13 +123,12 @@ class OfferPageBase extends Component {
   }
 
   checkClash = lesson => {
-    const count = this.state.count
-    this.mondayLessons = this.state.lessons.slice(0, count[0])
-    this.tuesdayLessons = this.state.lessons.slice(count[0], count[1])
-    this.wednesdayLessons = this.state.lessons.slice(count[1], count[2])
-    this.thursdayLessons = this.state.lessons.slice(count[2], count[3])
-    this.fridayLessons = this.state.lessons.slice(count[3], count[4])
-    this.saturdayLessons = this.state.lessons.slice(count[4], count[5])
+    const mondayLessons = this.state.mondayLessons
+    const tuesdayLessons = this.state.tuesdayLessons
+    const wednesdayLessons = this.state.wednesdayLessons
+    const thursdayLessons = this.state.thursdayLessons
+    const fridayLessons = this.state.fridayLessons
+    const saturdayLessons = this.state.saturdayLessons
 
     moment.locale('pt-BR');
     const format = 'HH:mm'
@@ -174,93 +152,93 @@ class OfferPageBase extends Component {
           console.log('HERE 1 ' + checked)
           do {
             console.log('HERE 2 ' + checked)
-            if(check(room, startTime, endTime, this.mondayLessons[counter].room, this.mondayLessons[counter].startTime, this.mondayLessons[counter].endTime)){
+            if(check(room, startTime, endTime, mondayLessons[counter].room, mondayLessons[counter].startTime, mondayLessons[counter].endTime)){
               checked = true
               console.log('HERE 3 ' + checked)
             }
             counter++
           }
-          while(checked === false && (counter < this.mondayLessons.length))
+          while(checked === false && (counter < mondayLessons.length))
           console.log('HERE 4 ' + checked)
         }
         break;
 
       case 'Terça-Feira':
-        if(this.tuesdayLessons.length > 0) {
+        if(tuesdayLessons.length > 0) {
           console.log('HERE 1 ' + checked)
           do {
             console.log('HERE 2 ' + checked + ' COUNTER ' + counter)
-            if(check(room, startTime, endTime, this.tuesdayLessons[counter].room, this.tuesdayLessons[counter].startTime, this.tuesdayLessons[counter].endTime)){
+            if(check(room, startTime, endTime, tuesdayLessons[counter].room, tuesdayLessons[counter].startTime, tuesdayLessons[counter].endTime)){
               checked = true
               console.log('HERE 3 ' + checked)
             }
             counter++
           }
-          while(checked === false && (counter < this.tuesdayLessons.length))
+          while(checked === false && (counter < tuesdayLessons.length))
           console.log('HERE 4 ' + checked)
         }
         break;
 
       case 'Quarta-Feira':
-        if(this.wednesdayLessons.length > 0) {
+        if(wednesdayLessons.length > 0) {
           console.log('HERE 1 ' + checked)
           do {
             console.log('HERE 2 ' + checked)
-            if(check(room, startTime, endTime, this.wednesdayLessons[counter].room, this.wednesdayLessons[counter].startTime, this.wednesdayLessons[counter].endTime)){
+            if(check(room, startTime, endTime, wednesdayLessons[counter].room, wednesdayLessons[counter].startTime, wednesdayLessons[counter].endTime)){
               checked = true
               console.log('HERE 3 ' + checked)
             }
             counter++
           }
-          while(checked === false && (counter < this.wednesdayLessons.length))
+          while(checked === false && (counter < wednesdayLessons.length))
           console.log('HERE 4 ' + checked)
         }
         break;
 
       case 'Quinta-Feira':
-        if(this.thursdayLessons.length > 0) {
+        if(thursdayLessons.length > 0) {
           console.log('HERE 1 ' + checked)
           do {
             console.log('HERE 2 ' + checked)
-            if(check(room, startTime, endTime, this.thursdayLessons[counter].room, this.thursdayLessons[counter].startTime, this.thursdayLessons[counter].endTime)){
+            if(check(room, startTime, endTime, thursdayLessons[counter].room, thursdayLessons[counter].startTime, thursdayLessons[counter].endTime)){
               checked = true
               console.log('HERE 3 ' + checked)
             }
             counter++
           }
-          while(checked === false && (counter < this.thursdayLessons.length))
+          while(checked === false && (counter < thursdayLessons.length))
           console.log('HERE 4 ' + checked)
         }
         break;
 
       case 'Sexta-Feira':
-        if(this.fridayLessons.length > 0) {
+        if(fridayLessons.length > 0) {
           console.log('HERE 1 ' + checked)
           do {
             console.log('HERE 2 ' + checked)
-            if(check(room, startTime, endTime, this.fridayLessons[counter].room, this.fridayLessons[counter].startTime, this.fridayLessons[counter].endTime)){
+            if(check(room, startTime, endTime, fridayLessons[counter].room, fridayLessons[counter].startTime, fridayLessons[counter].endTime)){
               checked = true
               console.log('HERE 3 ' + checked)
             }
             counter++
           }
-          while(checked === false && (counter < this.fridayLessons.length))
+          while(checked === false && (counter < fridayLessons.length))
           console.log('HERE 4 ' + checked)
         }
         break;
 
       case 'Sábado':
-        if(this.saturdayLessons.length > 0) {
+        if(saturdayLessons.length > 0) {
           console.log('HERE 1 ' + checked)
           do {
             console.log('HERE 2 ' + checked)
-            if(check(room, startTime, endTime, this.saturdayLessons[counter].room, this.saturdayLessons[counter].startTime, this.saturdayLessons[counter].endTime)){
+            if(check(room, startTime, endTime, saturdayLessons[counter].room, saturdayLessons[counter].startTime, saturdayLessons[counter].endTime)){
               checked = true
               console.log('HERE 3 ' + checked)
             }
             counter++
           }
-          while(checked === false && (counter < this.saturdayLessons.length))
+          while(checked === false && (counter < saturdayLessons.length))
           console.log('HERE 4 ' + checked)
         }
         break;
@@ -277,14 +255,35 @@ class OfferPageBase extends Component {
       })
     } 
 
-    if(this.state.lessons != undefined){
-      const count = this.state.count
-      this.mondayLessons = this.state.lessons.slice(0, count[0])
-      this.tuesdayLessons = this.state.lessons.slice(count[0], count[1])
-      this.wednesdayLessons = this.state.lessons.slice(count[1], count[2])
-      this.thursdayLessons = this.state.lessons.slice(count[2], count[3])
-      this.fridayLessons = this.state.lessons.slice(count[3], count[4])
-      this.saturdayLessons = this.state.lessons.slice(count[4], count[5])
+    let mondayLessons = []
+    let tuesdayLessons = []
+    let wednesdayLessons = []
+    let thursdayLessons = []
+    let fridayLessons = []
+    let saturdayLessons = []
+
+    if(this.state.mondayLessons != undefined){
+      mondayLessons = this.state.mondayLessons
+    }
+
+    if(this.state.tuesdayLessons != undefined){
+      tuesdayLessons = this.state.tuesdayLessons
+    }
+
+    if(this.state.wednesdayLessons != undefined){
+      wednesdayLessons = this.state.wednesdayLessons
+    }
+
+    if(this.state.thursdayLessons != undefined){
+      thursdayLessons = this.state.thursdayLessons
+    }
+
+    if(this.state.fridayLessons != undefined){
+      fridayLessons = this.state.fridayLessons
+    }
+
+    if(this.state.saturdayLessons != undefined){
+      saturdayLessons = this.state.saturdayLessons
     }
         
     const columns = [
@@ -306,8 +305,8 @@ class OfferPageBase extends Component {
     const mondayList =
     <EditableDataTable 
       columns={columns}
-      data={this.mondayLessons}
-      title='Segunda-Feira'
+      data={mondayLessons}
+      title='Segunda-feira'
       add={this.onAdd}
       edit={this.onEdit}
       delete={this.onDelete}
@@ -317,8 +316,8 @@ class OfferPageBase extends Component {
     const tuesdayList =
     <EditableDataTable 
       columns={columns}
-      data={this.tuesdayLessons}
-      title='Terça-Feira'
+      data={tuesdayLessons}
+      title='Terça-feira'
       add={this.onAdd}
       edit={this.onEdit}
       delete={this.onDelete}
@@ -328,8 +327,8 @@ class OfferPageBase extends Component {
     const wednesdayList = 
     <EditableDataTable 
       columns={columns}
-      data={this.wednesdayLessons}
-      title='Quarta-Feira'
+      data={wednesdayLessons}
+      title='Quarta-feira'
       add={this.onAdd}
       edit={this.onEdit}
       delete={this.onDelete}
@@ -339,8 +338,8 @@ class OfferPageBase extends Component {
     const thursdayList = 
     <EditableDataTable 
       columns={columns}
-      data={this.thursdayLessons}
-      title='Quinta-Feira'
+      data={thursdayLessons}
+      title='Quinta-feira'
       add={this.onAdd}
       edit={this.onEdit}
       delete={this.onDelete}
@@ -350,8 +349,8 @@ class OfferPageBase extends Component {
     const fridayList = 
     <EditableDataTable 
       columns={columns}
-      data={this.fridayLessons}
-      title='Sexta-Feira'
+      data={fridayLessons}
+      title='Sexta-feira'
       add={this.onAdd}
       edit={this.onEdit}
       delete={this.onDelete}
@@ -361,7 +360,7 @@ class OfferPageBase extends Component {
     const saturdayList =
     <EditableDataTable 
       columns={columns}
-      data={this.saturdayLessons}
+      data={saturdayLessons}
       title='Sábado'
       add={this.onAdd}
       edit={this.onEdit}
