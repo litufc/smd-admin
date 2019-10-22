@@ -21,10 +21,11 @@ class RequestsPageBase extends Component {
         this.listener = this.props.firebase
         .getAdmin()
         .onSnapshot(doc => {
-            const data = doc.data();
-            console.log(data.place)
-            this.getKeyRequests(data.place)
-            this.getResourceRequests(data.place)
+            if(doc.exists) {
+                const data = doc.data();
+                this.getKeyRequests(data.place)
+                this.getResourceRequests(data.place)
+            }
         })
     }
 
@@ -72,6 +73,7 @@ class RequestsPageBase extends Component {
             date: moment().format(dateFormat),
             key: request.key,
             name: request.user,
+            userId: request.userId,
             code: request.code,
             phone: request.phone,
             course: request.course,
@@ -83,30 +85,31 @@ class RequestsPageBase extends Component {
         }
         this.props.firebase
             .addKeyLoan(loan)
-            .then(() => {
+            .then(loan => {
                 //Chave: Disponível => Indisponível - user: Nome do Usuário
                 const id = request.keyId
                 const name = request.key
                 const place = request.place
                 const user = request.user //nome do usuário que pegou a chave
+                const userId = request.userId
                 const key = {
                     id: id,
                     name: name,
                     place: place,
                     status: false,
-                    user: user
+                    user: user,
+                    userId: userId,
+                    loanId: loan.id
                 }
+                console.log(key)
                 this.props.firebase
                     .updateKey(key)
                     .then(() => {
                         this.deleteKeyRequest(request)
                     })
-                    .catch(error => {
-                        //Snackbar deu errado
-                    })
             })
             .catch(error => {
-                //Snackbar deu errado
+                console.log(error)
             })
     }
 
@@ -123,6 +126,7 @@ class RequestsPageBase extends Component {
             date: moment().format(dateFormat),
             resource: request.resource,
             name: request.user,
+            userId: request.userId,
             code: request.code,
             phone: request.phone,
             course: request.course,
@@ -134,18 +138,21 @@ class RequestsPageBase extends Component {
         }
         this.props.firebase
             .addResourceLoan(loan)
-            .then(() => {
+            .then(loan => {
                 //Recurso: Disponível => Indisponível - user: Nome do Usuário
                 const id = request.resourceId
                 const name = request.resource
                 const place = request.place
                 const user = request.user //nome do usuário que pegou o recurso
+                const userId = request.userId
                 const resource = {
                     id: id,
                     name: name,
                     place: place,
                     status: false,
-                    user: user
+                    user: user,
+                    userId: userId,
+                    loanId: loan.id
                 }
                 this.props.firebase
                     .updateResource(resource)

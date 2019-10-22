@@ -155,7 +155,9 @@ class Firebase {
         name: resource.name,
         place: resource.place,
         status: resource.status,
-        user: resource.user
+        user: resource.user,
+        userId: resource.userId,
+        loanId: resource.loanId
     })
 
   updateResourceWithOutUser = resource =>
@@ -168,7 +170,9 @@ class Firebase {
   updateResourceDeletingUser = resourceId =>
     this.firestore.collection('resources').doc(resourceId).update({
       status: true,
-      user: this.firebase.firestore.FieldValue.delete()
+      user: this.firebase.firestore.FieldValue.delete(),
+      userId: this.firebase.firestore.FieldValue.delete(),
+      loanId: this.firebase.firestore.FieldValue.delete()
     })
 
   deleteResource = resourceId => this.firestore.collection('resources').doc(resourceId).delete()
@@ -181,12 +185,14 @@ class Firebase {
 
   addKey = key => this.firestore.collection('keys').add(key) 
 
-  updateKey = key =>
+  updateKey = key => 
     this.firestore.collection('keys').doc(key.id).set({
       name: key.name,
       place: key.place,
       status: key.status,
-      user: key.user
+      user: key.user,
+      userId: key.userId,
+      loanId: key.loanId
     })
 
   updateKeyWithOutUser = key =>
@@ -199,7 +205,9 @@ class Firebase {
   updateKeyDeletingUser = keyId =>
     this.firestore.collection('keys').doc(keyId).update({
       status: true,
-      user: this.firebase.firestore.FieldValue.delete()
+      user: this.firebase.firestore.FieldValue.delete(),
+      userId: this.firebase.firestore.FieldValue.delete(),
+      loanId: this.firebase.firestore.FieldValue.delete()
     })
 
   deleteKey = keyId => this.firestore.collection('keys').doc(keyId).delete()

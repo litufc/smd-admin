@@ -21,10 +21,12 @@ class LoansPageBase extends Component {
     this.listener = this.props.firebase
         .getAdmin()
         .onSnapshot(doc => {
+          if(doc.exists) {
             const data = doc.data();
             this.setState({place: data.place})
             this.getKeyLoans()
             this.getResourceLoans()
+          }
         })
   }
 
